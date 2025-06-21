@@ -12,12 +12,14 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 public interface UserMapper extends BaseMapper<TUser> {
     void add(TUser tUser);
+    void update(TUser tUser);
+    void delete(Long id);
+
     TUser getByEmailAndPassword(String email, String password);
     TUser getByPhoneAndPassword(String phone, String password);
     TUser getByEmail(String email);
     TUser getByPhone(String phone);
-    void update(TUser tUser);
-    void delete(Long id);
+
     int register(String username, String password, String email, String phone);
 
 }
