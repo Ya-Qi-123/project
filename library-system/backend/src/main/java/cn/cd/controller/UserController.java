@@ -6,6 +6,8 @@ import cn.cd.util.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -15,7 +17,10 @@ public class UserController {
     // 用户的邮箱密码登录
     @PostMapping("/login/EmailAndPassword")
     public Object loginByEmailAndPassword(@RequestParam String email,
-                                              @RequestParam String password){
+                                          @RequestParam String password,
+                                          HttpServletRequest request){
+        request.setAttribute("email", email);
+        request.setAttribute("password", password);
         TUser tUser = tUserService.loginServiceByEmailAndPassword(email, password);
         if(tUser!=null){
             return tUser;
@@ -27,7 +32,10 @@ public class UserController {
     // 用户的手机号密码登录
     @PostMapping("/login/PhoneAndPassword")
     public Object loginByPhoneAndPassword(@RequestParam String phone,
-                                              @RequestParam String password){
+                                          @RequestParam String password,
+                                          HttpServletRequest request){
+        request.setAttribute("phone", phone);
+        request.setAttribute("password", password);
         TUser tUser = tUserService.loginServiceByPhoneAndPassword(phone, password);
         if(tUser!=null){
             return tUser;
