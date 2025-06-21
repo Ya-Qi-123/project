@@ -1,0 +1,19 @@
+server:
+  port: 8080 # 端口浩
+  servlet:
+    context-path: / # 上下文路径
+# 连接数据库的四大金刚
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/library-system-database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# mybatis配置
+mybatis:
+  type-aliases-package: cn.cd.domain
+  mapper-locations: classpath:mapper/*Mapper.xml
+# 查看sql日志
+logging:
+  level:
+    cn.cd: trace

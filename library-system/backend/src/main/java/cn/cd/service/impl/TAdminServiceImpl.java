@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TAdmin;
 import cn.cd.service.TAdminService;
 import cn.cd.mapper.TAdminMapper;
+import org.springframework.stereotype.Service;
 
 /**
 * @author Lenovo
