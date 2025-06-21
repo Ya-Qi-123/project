@@ -5,14 +5,52 @@
 <mapper namespace="cn.cd.mapper.TAdminMapper">
 
     <resultMap id="BaseResultMap" type="cn.cd.domain.TAdmin">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="adminname" column="adminname" jdbcType="VARCHAR"/>
-            <result property="pasword" column="pasword" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="adminname" column="adminname" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,adminname,pasword,
-        email
+        id, adminname, password, email
     </sql>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into t_admin (adminname, password, email)
+        values (#{adminname}, #{password}, #{email})
+    </insert>
+    <update id="update">
+        update t_admin
+        set adminname=#{adminname}, password=#{password}, email=#{email}
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        delete from t_admin where id=#{id}
+    </delete>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_admin where id=#{id}
+    </select>
+
+
+    <select id="getByAdminname" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_admin where adminname=#{adminname}
+    </select>
+
+    <select id="getByEmail" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_admin where email=#{email}
+    </select>
+
+    <select id="getByEmailAndPassword" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_admin where email=#{email} and password=#{password}
+    </select>
+    <select id="selectByAdminnameAndPassword" resultType="cn.cd.domain.TAdmin">
+        select * from t_admin
+        where adminname=#{adminname} and password=#{password}
+    </select>
 </mapper>
