@@ -11,6 +11,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 
 public interface TUserMapper extends BaseMapper<TUser> {
+    void add(TUser tUser);
+    void delete(Long id);
+    void update(TUser tUser);
+    TUser getById(Long id);
+    TUser getByUsername(String username);
+    TUser getByPhone(String phone);
+    TUser getByEmail(String email);
+    TUser getByEmailAndPassword(String username, String password);
+    TUser getByPhoneAndPassword(String phone, String password);
 
 
 }
