@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cd.mapper.AdminMapper">
+    <insert id="add">
+        insert into t_admin (adminname, password, email)
+        values (#{adminname}, #{password}, #{email})
+    </insert>
+    <update id="update">
+        update t_admin
+        set adminname= #{adminname}, password= #{password}, email= #{email}
+        where id= #{id}
+    </update>
+    <delete id="delete">
+        delete from t_admin where id= #{id}
+    </delete>
+
+
+    <select id="selectByEmailAndPassword" resultType="cn.cd.domain.TAdmin">
+        select * from t_admin where email= #{email} and password= #{password}
+    </select>
+</mapper>

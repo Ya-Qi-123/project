@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.cd.mapper.TUserMapper">
+<mapper namespace="cn.cd.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="cn.cd.domain.TUser">
             <id property="id" column="id" jdbcType="BIGINT"/>
@@ -19,10 +19,17 @@
         email,phone,age,
         gender,status
     </sql>
+    <!-- 没有返回值的add -->
     <insert id="add">
         insert into t_user (username,password,email,phone,age,gender,status)
         values (#{username},#{password},#{email},#{phone},#{age},#{gender},#{status})
     </insert>
+
+    <insert id="register">
+        insert into t_user (username,password,email,phone)
+        values (#{username},#{password},#{email},#{phone})
+    </insert>
+
     <update id="update">
         update t_user set username=#{username},password=#{password},email=#{email},phone=#{phone},age=#{age},gender=#{gender},status=#{status}
         where id=#{id}

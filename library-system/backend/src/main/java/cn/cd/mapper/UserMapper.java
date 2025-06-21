@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity generator.domain.TUser
 */
 
-public interface TUserMapper extends BaseMapper<TUser> {
+public interface UserMapper extends BaseMapper<TUser> {
     void add(TUser tUser);
     TUser getByEmailAndPassword(String email, String password);
     TUser getByPhoneAndPassword(String phone, String password);
@@ -18,7 +18,7 @@ public interface TUserMapper extends BaseMapper<TUser> {
     TUser getByPhone(String phone);
     void update(TUser tUser);
     void delete(Long id);
-
+    int register(String username, String password, String email, String phone);
 
 }
 
