@@ -12,6 +12,7 @@ public class UserController {
     @Autowired
     private UserService tUserService;
 
+    // 用户的邮箱密码登录
     @PostMapping("/login/EmailAndPassword")
     public Object loginByEmailAndPassword(@RequestParam String email,
                                               @RequestParam String password){
@@ -23,6 +24,7 @@ public class UserController {
         }
     }
 
+    // 用户的手机号密码登录
     @PostMapping("/login/PhoneAndPassword")
     public Object loginByPhoneAndPassword(@RequestParam String phone,
                                               @RequestParam String password){
@@ -34,6 +36,7 @@ public class UserController {
         }
     }
 
+    // 用户的注册
     @PostMapping("/register")
     public Object register(@RequestParam String username,
                                @RequestParam String email,
