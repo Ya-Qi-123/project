@@ -2,6 +2,8 @@ package cn.cd.service;
 
 import cn.cd.domain.TLendrecord;
 
+import java.util.List;
+
 public interface LendService {
-    TLendrecord countByCategory();
+    List<TLendrecord> countByCategory();
 }

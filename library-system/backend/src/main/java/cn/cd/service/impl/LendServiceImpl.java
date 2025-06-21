@@ -6,13 +6,15 @@ import cn.cd.service.LendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LendServiceImpl implements LendService {
     @Autowired
     private LendrecordMapper lendrecordMapper;
     @Override
-    public TLendrecord countByCategory() {
-        TLendrecord lendrecord = lendrecordMapper.countByCategory();
+    public List<TLendrecord> countByCategory() {
+        List<TLendrecord> lendrecord = lendrecordMapper.countByCategory();
         return lendrecord;
     }
 }

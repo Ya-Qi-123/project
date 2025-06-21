@@ -2,6 +2,8 @@ package cn.cd.mapper;
 
 import cn.cd.domain.TLendrecord;
 
+import java.util.List;
+
 public interface LendrecordMapper {
     void add(TLendrecord lendrecord);
     void update(TLendrecord lendrecord);
@@ -12,6 +14,6 @@ public interface LendrecordMapper {
     TLendrecord getByUserid(String userid);
 
     // 给首页可视化使用，显示每个类的图书被借阅总次数
-    TLendrecord countByCategory();
+    List<TLendrecord> countByCategory();
 
 }

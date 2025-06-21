@@ -21,9 +21,9 @@ public class TLendrecord {
     @TableField(value = "return_time")
     private String returntime;
 
-    @TableField(value = "status")
-    private String status;
-
     @TableField(value = "category")
     private String category;
+
+    // 表示被借阅次数
+    private int lendNum;
 }
