@@ -2,8 +2,8 @@ package cn.cd.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TUser;
-import cn.cd.service.TUserService;
-import cn.cd.mapper.TUserMapper;
+import cn.cd.service.UserService;
+import cn.cd.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 * @createDate 2025-06-21 09:03:06
 */
 @Service
-public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser>
-        implements TUserService{
+public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
+        implements UserService {
     @Autowired
-    private TUserMapper tUserMapper;
+    private UserMapper tUserMapper;
 
     // TUserServiceImpl 中新增的邮箱登录方法
     @Override
@@ -32,13 +32,9 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser>
     }
 
     @Override
-    public TUser registerServiceByEmailAndPassword(TUser tUser) {
-        return null;
-    }
-
-    @Override
-    public TUser registerServiceByPhoneAndPassword(TUser tUser) {
-        return null;
+    public int registerService(String username, String password,
+                                 String email, String phone) {
+        return tUserMapper.register(username, password, email, phone);
     }
 
 
