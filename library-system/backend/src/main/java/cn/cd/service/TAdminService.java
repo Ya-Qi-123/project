@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2025-06-21 09:22:10
 */
 public interface TAdminService extends IService<TAdmin> {
-    
+
 }

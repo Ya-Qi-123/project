@@ -10,7 +10,6 @@
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="age" column="age" jdbcType="INTEGER"/>
             <result property="gender" column="gender" jdbcType="VARCHAR"/>
             <result property="status" column="status" jdbcType="VARCHAR"/>
     </resultMap>
@@ -20,4 +19,33 @@
         email,phone,age,
         gender,status
     </sql>
+    <insert id="add">
+        insert into t_user (username,password,email,phone,age,gender,status)
+        values (#{username},#{password},#{email},#{phone},#{age},#{gender},#{status})
+    </insert>
+    <update id="update">
+        update t_user set username=#{username},password=#{password},email=#{email},phone=#{phone},age=#{age},gender=#{gender},status=#{status}
+        where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from t_user where id=#{id}
+    </delete>
+    <select id="getById" resultType="cn.cd.domain.TUser">
+        select * from t_user where id=#{id}
+    </select>
+    <select id="getByUsername" resultType="cn.cd.domain.TUser">
+        select * from t_user where username= #{username}
+    </select>
+    <select id="getByPhone" resultType="cn.cd.domain.TUser">
+        select * from t_user where phone= #{phone}
+    </select>
+    <select id="getByEmail" resultType="cn.cd.domain.TUser">
+        select * from t_user where email= #{email}
+    </select>
+    <select id="getByEmailAndPassword" resultType="cn.cd.domain.TUser">
+        select * from t_user where email= #{email} and password= #{password}
+    </select>
+    <select id="getByPhoneAndPassword" resultType="cn.cd.domain.TUser">
+        select * from t_user where phone= #{phone} and password= #{password}
+    </select>
 </mapper>

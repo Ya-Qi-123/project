@@ -10,5 +10,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 
 public interface TUserService extends IService<TUser> {
+    TUser loginServiceByEmailAndPassword(String email, String password);
+    TUser loginServiceByPhoneAndPassword(String phone, String password);
 
+    TUser registerServiceByEmailAndPassword(TUser tUser);
 }
