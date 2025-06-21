@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/book")
 public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping()
+    @GetMapping("/borrow")
     public Object homePage() {
         return bookService.HomePageService();
     }
