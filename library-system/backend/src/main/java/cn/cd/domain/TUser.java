@@ -11,12 +11,15 @@ import lombok.Data;
 @Data
 public class TUser implements Serializable {
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id")
     private Long id;
 
     private String username;
     private String password;
+
+    @TableField(value = "email")
     private String email;
+
     private String phone;
     private String gender;
     private String status;

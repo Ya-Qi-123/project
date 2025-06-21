@@ -1,20 +1,25 @@
 package cn.cd.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TAdmin;
-import cn.cd.service.TAdminService;
 import cn.cd.mapper.TAdminMapper;
+import cn.cd.service.TAdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-/**
-* @author Lenovo
-* @description 针对表【t_admin】的数据库操作Service实现
-* @createDate 2025-06-21 09:22:10
-*/
 @Service
-public class TAdminServiceImpl extends ServiceImpl<TAdminMapper, TAdmin> implements TAdminService{
+public class TAdminServiceImpl implements TAdminService {
 
+    @Autowired
+    private TAdminMapper adminMapper;
+
+
+    public TAdmin login(String adminname, String password) {
+        return adminMapper.selectByAdminnameAndPassword(adminname, password);
+    }
+
+    @Override
+    public TAdmin getByAdminnameAndPassword(String adminname, String password) {
+        TAdmin tAdmin = adminMapper.selectByAdminnameAndPassword(adminname, password);
+        return tAdmin;
+    }
 }
-
-
-
-

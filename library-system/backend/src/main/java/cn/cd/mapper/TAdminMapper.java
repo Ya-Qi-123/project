@@ -1,18 +1,17 @@
 package cn.cd.mapper;
 
 import cn.cd.domain.TAdmin;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
-/**
-* @author Lenovo
-* @description 针对表【t_admin】的数据库操作Mapper
-* @createDate 2025-06-21 09:22:10
-* @Entity generator.domain.TAdmin
-*/
-public interface TAdminMapper extends BaseMapper<TAdmin> {
+@Mapper
+public interface TAdminMapper {
+    int add(TAdmin admin);
+    int update(TAdmin admin);
+    int delete(Long id);
+    TAdmin getById(Long id);
+    TAdmin getByAdminname(String adminname);
+    TAdmin getByEmail(String email);
+    TAdmin getByEmailAndPassword(String email, String password);
+    TAdmin selectByAdminnameAndPassword(String adminname, String password);
 
 }
-
-
-
-
