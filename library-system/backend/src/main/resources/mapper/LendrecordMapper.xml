@@ -27,8 +27,8 @@
         select * from t_lendrecord where user_id= #{userid}
     </select>
     <select id="countByCategory" resultType="cn.cd.domain.TLendrecord">
-        select count(*)
-        from t_lendrecord
-        order by category
+        select count(*) as countNum, category
+        from t_lendrecord group by category
     </select>
+
 </mapper>
