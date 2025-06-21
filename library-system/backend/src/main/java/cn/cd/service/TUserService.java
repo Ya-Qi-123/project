@@ -1,7 +1,7 @@
 package cn.cd.service;
 
 import cn.cd.domain.TUser;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
 * @author Lenovo
@@ -9,9 +9,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2025-06-21 09:03:06
 */
 
-public interface TUserService extends IService<TUser> {
+public interface TUserService {
     TUser loginServiceByEmailAndPassword(String email, String password);
     TUser loginServiceByPhoneAndPassword(String phone, String password);
 
     TUser registerServiceByEmailAndPassword(TUser tUser);
+    TUser registerServiceByPhoneAndPassword(TUser tUser);
 }
