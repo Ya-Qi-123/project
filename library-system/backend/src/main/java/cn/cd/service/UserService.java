@@ -1,7 +1,6 @@
 package cn.cd.service;
 
 import cn.cd.domain.TUser;
-import org.springframework.stereotype.Service;
 
 /**
 * @author Lenovo
@@ -9,10 +8,10 @@ import org.springframework.stereotype.Service;
 * @createDate 2025-06-21 09:03:06
 */
 
-public interface TUserService {
+public interface UserService {
     TUser loginServiceByEmailAndPassword(String email, String password);
     TUser loginServiceByPhoneAndPassword(String phone, String password);
 
-    TUser registerServiceByEmailAndPassword(TUser tUser);
-    TUser registerServiceByPhoneAndPassword(TUser tUser);
+    int registerService(String username, String password, String email, String phone);
+
 }
