@@ -1,8 +1,9 @@
 package cn.cd.service.impl;
-
 import cn.cd.domain.TBook;
 import cn.cd.mapper.BookMapper;
 import cn.cd.service.BookService;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,34 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
-
-
+    @Override
+    public Page<TBook> getBooksByPage(int current, int size,
+                                      String name, String author, String isbn) {
+        Page<TBook> page = new Page<>(current, size);
+        return bookMapper.selectPage(page, name, author, isbn);
+    }
     @Override
     public List<TBook> HomePageService() {
         return bookMapper.getAll();
     }
+
+    @Override
+    public int addBook(TBook book) {
+        return bookMapper.add(book);
+    }
+
+    @Override
+    public int updateBook(TBook book) {
+        return bookMapper.update(book);
+    }
+
+    @Override
+    public TBook getBookById(Long id) {
+        return bookMapper.getById(id);
+    }
+    @Override
+    public int batchDeleteBooks(List<Long> ids) {
+        return bookMapper.batchDeleteBooks(ids);
+    }
+
 }
