@@ -17,3 +17,8 @@ mybatis:
 logging:
   level:
     cn.cd: trace
+
+# 导入mybatiplus的依赖
+mybatis-plus:
+  type-aliases-package: cn.cd.domain
+  mapper-locations: classpath:mapper/*Mapper.xml

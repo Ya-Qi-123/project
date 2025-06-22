@@ -1,5 +1,6 @@
 package cn.cd.service.impl;
 
+import cn.cd.service.LendService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TUser;
 import cn.cd.service.UserService;
@@ -35,6 +36,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
     public int registerService(String username, String password,
                                  String email, String phone) {
         return tUserMapper.register(username, password, email, phone);
+    }
+
+    @Override
+    public int updateStatus(Long id, Integer status) {
+        return tUserMapper.updateStatus(id, status);
+    }
+
+    @Override
+    public int update(TUser tUser) {
+        int temp = tUserMapper.update(tUser);
+        if(temp == 1){
+            return
+        }
+    }
+
+    @Override
+    public int delete(Long id) {
+        return 0;
     }
 
 

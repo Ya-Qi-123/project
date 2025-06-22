@@ -5,20 +5,15 @@
 <mapper namespace="cn.cd.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="cn.cd.domain.TUser">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <id property="id" column="id"/>
+            <result property="username" column="username"/>
+            <result property="password" column="password"/>
             <result property="email" column="email"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="gender" column="gender" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone"/>
+            <result property="gender" column="gender"/>
+            <result property="status" column="status"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,username,password,
-        email,phone,age,
-        gender,status
-    </sql>
     <!-- 没有返回值的add -->
     <insert id="add">
         insert into t_user (username,password,email,phone,age,gender,status)
@@ -31,28 +26,32 @@
     </insert>
 
     <update id="update">
-        update t_user set username=#{username},password=#{password},email=#{email},phone=#{phone},age=#{age},gender=#{gender},status=#{status}
+        update t_user set username=#{username},password=#{password},email=#{email},
+                          phone=#{phone},age=#{age},gender=#{gender},status=#{status}
         where id=#{id}
+    </update>
+    <update id="updateStatus">
+        update t_user set status=#{status} where id=#{id}
     </update>
     <delete id="delete">
         delete from t_user where id=#{id}
     </delete>
-    <select id="getById" resultType="cn.cd.domain.TUser">
+    <select id="getById" resultMap="BaseResultMap">
         select * from t_user where id=#{id}
     </select>
-    <select id="getByUsername" resultType="cn.cd.domain.TUser">
+    <select id="getByUsername" resultMap="BaseResultMap">
         select * from t_user where username= #{username}
     </select>
-    <select id="getByPhone" resultType="cn.cd.domain.TUser">
+    <select id="getByPhone" resultMap="BaseResultMap">
         select * from t_user where phone= #{phone}
     </select>
-    <select id="getByEmail" resultType="cn.cd.domain.TUser">
+    <select id="getByEmail" resultMap="BaseResultMap">
         select * from t_user where email= #{email}
     </select>
-    <select id="getByEmailAndPassword" resultType="cn.cd.domain.TUser">
+    <select id="getByEmailAndPassword" resultMap="BaseResultMap">
         select * from t_user where email= #{email} and password= #{password}
     </select>
-    <select id="getByPhoneAndPassword" resultType="cn.cd.domain.TUser">
+    <select id="getByPhoneAndPassword" resultMap="BaseResultMap">
         select * from t_user where phone= #{phone} and password= #{password}
     </select>
 </mapper>

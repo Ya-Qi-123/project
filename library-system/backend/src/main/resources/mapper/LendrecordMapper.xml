@@ -3,32 +3,59 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.cd.mapper.LendrecordMapper">
+    <resultMap id="LendrecordMap" type="cn.cd.domain.TLendrecord">
+        <!-- 显式映射所有字段（解决命名不匹配） -->
+        <result column="user_id" property="user_id"/>
+        <result column="book_id" property="book_id"/> <!-- 关键映射 -->
+        <result column="bookname" property="bookname"/>
+        <result column="category" property="category"/>
+        <result column="rent_time" property="rent_time"/>
+        <result column="return_time" property="return_time"/>
+        <result column="status" property="status"/>
+    </resultMap>
 
-    <insert id="add">
-        insert into t_lendrecord (book_id, user_id, lend_time, return_time)
-        values (#{bookid}, #{userid}, #{lendtime}, #{returntime})
+    <insert id="addRecord">
+        INSERT INTO t_lendrecord (user_id, book_id, category, rent_time,
+                                  return_time, bookname, status)
+        VALUES (#{user_id}, #{book_id}, #{category}, NOW(),
+                DATE_ADD(NOW(), INTERVAL 30 DAY), #{bookname}, 1)
     </insert>
-    <update id="update">
-        update t_lendrecord
-        set book_id= #{bookid}, user_id= #{userid},
-            lend_time= #{lendtime}, return_time= #{returntime}
-        where id= #{id}
+    <update id="updateRecordStatus">
+        UPDATE t_lendrecord
+        SET status = #{status}
+        WHERE id = #{id}
     </update>
-    <delete id="delete">
-        delete from t_lendrecord where id= #{id}
+    <delete id="deleteRecord">
+        DELETE FROM t_lendrecord WHERE id = #{id}
     </delete>
-    <select id="getById" resultType="cn.cd.domain.TLendrecord">
-        select * from t_lendrecord where id= #{id}
-    </select>
-    <select id="getByBookid" resultType="cn.cd.domain.TLendrecord">
-        select * from t_lendrecord where book_id= #{bookid}
-    </select>
-    <select id="getByUserid" resultType="cn.cd.domain.TLendrecord">
-        select * from t_lendrecord where user_id= #{userid}
-    </select>
-    <select id="countByCategory" resultType="cn.cd.domain.TLendrecord">
-        select count(*) as lendNum, category
+
+    <select id="countByCategory" resultMap = "LendrecordMap">
+        select count(*) as categoryLendNum, category
         from t_lendrecord group by category
+    </select>
+    <select id="countByName" resultMap = "LendrecordMap">
+        select count(*) as booknameLendNum, bookname, category
+        from t_lendrecord group by bookname, category
+    </select>
+    <select id="countByUserid" resultMap = "LendrecordMap">
+        select count(*) as userRentNum, user_id
+        from t_lendrecord group by user_id
+    </select>
+    <select id="getByUseridAndSome" resultMap = "LendrecordMap">
+        select * from t_lendrecord
+        where user_id = #{user_id}
+        <if test="book_id != null and book_id != ''">
+            and book_id = #{book_id}
+        </if>
+        <if test="bookname != null and bookname != ''">
+            and bookname like concat('%',#{bookname},'%')
+        </if>
+        <if test="category != null and category != ''">
+            and category like concat('%',#{category},'%')
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
     </select>
 
 </mapper>

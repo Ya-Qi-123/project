@@ -47,9 +47,9 @@ public class UserController {
     // 用户的注册
     @PostMapping("/register")
     public Object register(@RequestParam String username,
-                               @RequestParam String email,
-                               @RequestParam String phone,
-                               @RequestParam String password){
+                           @RequestParam String email,
+                           @RequestParam String phone,
+                           @RequestParam String password){
         int temp = tUserService.registerService(username, email, phone, password);
         if(temp == 1){
             return AjaxResult.ok( "注册成功！");
@@ -58,4 +58,14 @@ public class UserController {
         }
     }
 
+    @PostMapping("/updateStatus")
+    public Object updateStatus(@RequestParam Long id,
+                               @RequestParam Integer status){
+        int temp = tUserService.updateStatus(id, status);
+        if(temp == 1){
+            return AjaxResult.ok( "状态修改成功！");
+        }else{
+            return AjaxResult.fail("状态修改失败！");
+        }
+    }
 }
