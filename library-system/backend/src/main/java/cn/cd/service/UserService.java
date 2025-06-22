@@ -9,6 +9,6 @@ public interface UserService {
     int registerService(String username, String password, String email, String phone);
     int updateStatus(Long id, Integer status);
 
-    int update(TUser tUser);
+    // int update(TUser tUser);
     int delete(Long id);
 }

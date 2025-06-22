@@ -43,12 +43,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
         return tUserMapper.updateStatus(id, status);
     }
 
-    /*
-    @Override
-    public int update(TUser tUser) {
-        int temp = tUserMapper.update(tUser);
-
-    }*/
 
     @Override
     public int delete(Long id) {
