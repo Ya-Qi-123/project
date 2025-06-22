@@ -17,10 +17,7 @@ public class UserController {
     // 用户的邮箱密码登录
     @PostMapping("/login/EmailAndPassword")
     public Object loginByEmailAndPassword(@RequestParam String email,
-                                          @RequestParam String password,
-                                          HttpServletRequest request){
-        request.setAttribute("email", email);
-        request.setAttribute("password", password);
+                                          @RequestParam String password){
         TUser tUser = tUserService.loginServiceByEmailAndPassword(email, password);
         if(tUser!=null){
             return tUser;
@@ -32,10 +29,7 @@ public class UserController {
     // 用户的手机号密码登录
     @PostMapping("/login/PhoneAndPassword")
     public Object loginByPhoneAndPassword(@RequestParam String phone,
-                                          @RequestParam String password,
-                                          HttpServletRequest request){
-        request.setAttribute("phone", phone);
-        request.setAttribute("password", password);
+                                          @RequestParam String password){
         TUser tUser = tUserService.loginServiceByPhoneAndPassword(phone, password);
         if(tUser!=null){
             return tUser;
@@ -58,6 +52,7 @@ public class UserController {
         }
     }
 
+    // 用户的状态修改
     @PostMapping("/updateStatus")
     public Object updateStatus(@RequestParam Long id,
                                @RequestParam Integer status){
@@ -66,6 +61,43 @@ public class UserController {
             return AjaxResult.ok( "状态修改成功！");
         }else{
             return AjaxResult.fail("状态修改失败！");
+        }
+    }
+
+    // 用户个人信息修改
+    @PostMapping("/updatePersonalInformation")
+    public Object update(Long id, String username, String email, String phone, String gender){
+        int temp = tUserService.updatePersonalInformation(id, username, email, phone, gender);
+        if(temp == 1){
+            return AjaxResult.ok( "修改成功！");
+        }else{
+            return AjaxResult.fail("修改失败！");
+        }
+    }
+
+    // 删除用户
+    @DeleteMapping("/delete")
+    public Object delete(@RequestParam Long id){
+        int temp = tUserService.delete(id);
+        if(temp == 1){
+            return AjaxResult.ok( "删除成功！");
+        }else{
+            return AjaxResult.fail("删除失败！");
+        }
+    }
+
+    // 修改用户密码
+    @PostMapping("/updatePassword")
+    public Object updatePassword(@RequestParam Long id,
+                                 @RequestParam String oldPassword,
+                                 @RequestParam String newPassword){
+        TUser tUser = tUserService.getById(id);
+        if(tUser.getPassword().equals(oldPassword)){
+            tUser.setPassword(newPassword);
+            tUserService.updateById(tUser);
+            return AjaxResult.ok("修改成功！");
+        }else{
+            return AjaxResult.fail("原密码错误！");
         }
     }
 }

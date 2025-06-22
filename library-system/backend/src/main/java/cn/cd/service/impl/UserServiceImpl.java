@@ -43,12 +43,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
         return tUserMapper.updateStatus(id, status);
     }
 
-
     @Override
     public int delete(Long id) {
-        return 0;
+        int temp = tUserMapper.delete(id);
+        return temp;
     }
 
+    @Override
+    public int updatePersonalInformation(Long id, String username, String email,
+                                         String phone, String gender) {
+        return tUserMapper.updatePersonalInformation(id, username, email, phone, gender);
+    }
 
 }
 
