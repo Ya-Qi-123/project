@@ -9,7 +9,6 @@ public class TAdmin {
     private String password;
     private String email;
 
-    // getter/setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getAdminname() { return adminname; }

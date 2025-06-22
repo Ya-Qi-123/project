@@ -10,20 +10,12 @@ import lombok.Data;
 @TableName(value ="t_user")
 @Data
 public class TUser implements Serializable {
-
-    @TableId(value = "id")
     private Long id;
-
     private String username;
     private String password;
-
-    @TableField(value = "email")
     private String email;
-
     private String phone;
     private String gender;
     private String status;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }
