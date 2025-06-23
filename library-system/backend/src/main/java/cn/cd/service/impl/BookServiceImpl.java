@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -14,8 +15,9 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
     @Override
-    public Page<TBook> getBooksByPage(int current, int size,
-                                      String name, String author, String isbn) {
+    public Page<TBook> getBooksByPage(
+            int current, int size,
+            String name, String author, String isbn) {
         Page<TBook> page = new Page<>(current, size);
         return bookMapper.selectPage(page, name, author, isbn);
     }
@@ -25,8 +27,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public int addBook(TBook book) {
-        return bookMapper.add(book);
+    public int addBook(String isbn, String name, BigDecimal price,
+                       String author, String publisher, String category) {
+        return bookMapper.add(isbn,name,price, author,publisher,category);
     }
 
     @Override

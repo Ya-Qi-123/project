@@ -21,24 +21,34 @@ public class BookController {
     private static final int MAX_INTEGER_DIGITS = 8;
     private static final int MAX_DECIMAL_DIGITS = 2;
 
-    @GetMapping("/pageQuery")
-    public AjaxResult getBooksByPageQuery(@RequestParam(defaultValue = "1") int currentPage,
-                                          @RequestParam(defaultValue = "10") int size,
-                                          @RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String author,
-                                          @RequestParam(required = false) String isbn) {
-        Page<TBook> page = bookService.getBooksByPage(currentPage, size, name, author, isbn);
+    @GetMapping("/page")
+    public AjaxResult getBooksByPage(
+            @RequestParam(defaultValue = "1") int currentPage,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String isbn) {
+
+        Page<TBook> page = bookService.getBooksByPage(currentPage, size, name,
+                author, isbn);
         return AjaxResult.ok().setData(page);
     }
     @PostMapping("/add")
-    public AjaxResult addBook(@RequestBody TBook book) {
-        String errorMsg = validateBookFields(book);
+    public AjaxResult addBook(
+            @RequestParam String isbn,
+            @RequestParam String name,
+            @RequestParam String author,
+            @RequestParam BigDecimal price,
+            @RequestParam String publisher,
+            @RequestParam String category) {
+        String errorMsg = validateBookFields(isbn, name, price,
+                author, publisher, category);
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-        return bookService.addBook(book) > 0
-                ? AjaxResult.ok("添加成功")
-                : AjaxResult.fail().setMessage("添加失败");
+        bookService.addBook(isbn, name, price, author, publisher, category);
+        return AjaxResult.me().setMessage("添加成功");
+
     }
 
     @GetMapping("/list")
@@ -50,19 +60,18 @@ public class BookController {
     }
 
     @PostMapping("/update")
-    public AjaxResult updateBook(@RequestBody TBook book) {
+    public AjaxResult updateBook(TBook  book) {
         if (!isValidId(book.getId())) {
             return AjaxResult.fail("图书ID格式错误");
         }
-
-        String errorMsg = validateBookFields(book);
+        String errorMsg = validateBookFields(book.getIsbn(), book.getName(),
+                book.getPrice(), book.getAuthor(),
+                book.getPublisher(), book.getCategory());
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-
-        return bookService.updateBook(book) > 0
-                ? AjaxResult.ok("更新图书成功")
-                : AjaxResult.fail("更新图书失败");
+        bookService.updateBook(book);
+        return AjaxResult.me().setMessage("更新成功");
     }
     @PostMapping("/batchDelete")
     public AjaxResult batchDeleteBooks(@RequestBody List<Long> ids) {
@@ -74,7 +83,7 @@ public class BookController {
                 ? AjaxResult.ok("成功删除" + result + "本图书")
                 : AjaxResult.fail("删除失败");
     }
-    @GetMapping("/getById")
+    @GetMapping("/detail")
     public AjaxResult getByBookDetail(@RequestParam Long id) {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
@@ -88,17 +97,19 @@ public class BookController {
         return id != null && id > 0;
     }
 
-    private String validateBookFields(TBook book) {
-        if (StringUtils.isEmpty(book.getIsbn())) return "ISBN不能为空";
-        if (StringUtils.isEmpty(book.getName())) return "图书名称不能为空";
-        if (StringUtils.isEmpty(book.getAuthor())) return "作者不能为空";
-        if (StringUtils.isEmpty(book.getPublisher())) return "出版社不能为空";
-        if (StringUtils.isEmpty(book.getStatus())) return "状态不能为空";
-        if (StringUtils.isEmpty(book.getCategory())) return "分类不能为空";
-        if (book.getPrice() == null) return "价格不能为空";
+    private String validateBookFields(String isbn, String name,
+                                      BigDecimal price, String author,
+                                      String publisher, String category) {
+        if (StringUtils.isEmpty(isbn)) return "ISBN不能为空";
+        if (StringUtils.isEmpty(name)) return "图书名称不能为空";
+        if (StringUtils.isEmpty(author)) return "作者不能为空";
+        if (StringUtils.isEmpty(author)) return "出版社不能为空";
+        if (StringUtils.isEmpty(publisher)) return "状态不能为空";
+        if (StringUtils.isEmpty(category)) return "分类不能为空";
+        if (price == null) return "价格不能为空";
 
         // 价格校验
-        return validatePrice(book.getPrice());
+        return validatePrice(price);
     }
 
     private String validatePrice(BigDecimal price) {

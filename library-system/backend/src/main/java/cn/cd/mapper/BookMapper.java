@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BookMapper extends BaseMapper<TBook> {
-    int add(TBook book);
+    int add(String isbn, String name, BigDecimal price,
+            String author, String publisher,String category);
     int update(TBook book);
     int batchDeleteBooks(List<Long> ids);
 
