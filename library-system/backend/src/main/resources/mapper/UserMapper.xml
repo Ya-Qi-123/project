@@ -21,8 +21,8 @@
     </insert>
 
     <insert id="register">
-        insert into t_user (username,password,email,phone)
-        values (#{username},#{password},#{email},#{phone})
+        insert into t_user (username,password,email,phone,status)
+        values (#{username},#{password},#{email},#{phone}, 1)
     </insert>
 
     <update id="updateStatus">
