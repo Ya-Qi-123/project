@@ -15,12 +15,20 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookMapper bookMapper;
     @Override
-    public Page<TBook> getBooksByPage(
+    public Page<TBook> getBooksByPageForAdmin(
             int current, int size,
             String name, String author, String isbn) {
         Page<TBook> page = new Page<>(current, size);
-        return bookMapper.selectPage(page, name, author, isbn);
+        return bookMapper.selectPageForAdmin(page, name, author, isbn);
     }
+
+    @Override
+    public Page<TBook> getBooksByPageForUser(int current, int size, String name,
+                                             String author, String isbn, String category) {
+        Page<TBook> page = new Page<>(current, size);
+        return bookMapper.selectPageForUser(page, name, author, isbn, category);
+    }
+
     @Override
     public List<TBook> HomePageService() {
         return bookMapper.getAll();

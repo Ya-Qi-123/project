@@ -4,6 +4,7 @@ import cn.cd.domain.TUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface UserService extends IService<TUser> {
+
     TUser loginServiceByEmailAndPassword(String email, String password);
     TUser loginServiceByPhoneAndPassword(String phone, String password);
 

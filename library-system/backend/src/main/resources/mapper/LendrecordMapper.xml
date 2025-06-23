@@ -18,7 +18,7 @@
         INSERT INTO t_lendrecord (user_id, book_id, category, rent_time,
                                   return_time, bookname, status)
         VALUES (#{user_id}, #{book_id}, #{category}, NOW(),
-                DATE_ADD(NOW(), INTERVAL 30 DAY), #{bookname}, 11)
+                DATE_ADD(NOW(), INTERVAL 30 DAY), #{bookname}, 1)
     </insert>
     <update id="updateRecordStatus">
         UPDATE t_lendrecord
