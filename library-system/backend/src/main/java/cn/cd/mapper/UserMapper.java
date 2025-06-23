@@ -11,7 +11,6 @@ public interface UserMapper extends BaseMapper<TUser> {
     int updatePersonalInformation(Long id, String username, String email, String phone, String gender);
     int updatePassword(Long id, String password);
     int updateStatus(Long id, Integer status);
-
     int delete(Long id);
 
     TUser getByEmailAndPassword(String email, String password);

@@ -16,6 +16,6 @@ public class TUser implements Serializable {
     private String email;
     private String phone;
     private String gender;
-    private String status;
+    private Integer status;
 
 }

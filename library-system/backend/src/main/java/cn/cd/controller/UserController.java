@@ -19,11 +19,16 @@ public class UserController {
     public Object loginByEmailAndPassword(@RequestParam String email,
                                           @RequestParam String password){
         TUser tUser = tUserService.loginServiceByEmailAndPassword(email, password);
-        if(tUser!=null){
-            return tUser;
+        if(tUser == null){
+            return AjaxResult.fail("登录失败,邮箱或密码错误。");
         }else{
-            return AjaxResult.fail("登录失败！");
+            if(tUser.getStatus() == 1){
+                return tUser;
+            }else if(tUser.getStatus() != 1){
+                return AjaxResult.fail("登录失败,该账号无法使用");
+            }
         }
+        return null;
     }
 
     // 用户的手机号密码登录
@@ -31,11 +36,15 @@ public class UserController {
     public Object loginByPhoneAndPassword(@RequestParam String phone,
                                           @RequestParam String password){
         TUser tUser = tUserService.loginServiceByPhoneAndPassword(phone, password);
-        if(tUser!=null){
-            return tUser;
-        }else{
-            return AjaxResult.fail("登录失败！");
+        if(tUser == null){
+            return AjaxResult.fail("登录失败，手机号或密码错误。");
         }
+        if(tUser.getStatus() == 1){
+            return tUser;
+        }else if(tUser.getStatus() != 1){
+            return AjaxResult.fail("登录失败,该账号无法使用");
+        }
+        return null;
     }
 
     // 用户的注册
@@ -44,6 +53,11 @@ public class UserController {
                            @RequestParam String email,
                            @RequestParam String phone,
                            @RequestParam String password){
+        TUser tUser1 = tUserService.loginServiceByEmailAndPassword(email, password);
+        TUser tUser2 = tUserService.loginServiceByPhoneAndPassword(phone, password);
+        if(tUser1 != null || tUser2 != null){
+            return AjaxResult.fail("注册失败,邮箱或手机号已注册");
+        }
         int temp = tUserService.registerService(username, email, phone, password);
         if(temp == 1){
             return AjaxResult.ok( "注册成功！");
@@ -76,7 +90,7 @@ public class UserController {
     }
 
     // 删除用户
-    @DeleteMapping("/delete")
+    @DeleteMapping("/deleteById")
     public Object delete(@RequestParam Long id){
         int temp = tUserService.delete(id);
         if(temp == 1){

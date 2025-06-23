@@ -28,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
 
     @Override
     public TUser loginServiceByPhoneAndPassword(String phone, String password) {
-        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password);
+        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password); // Mapper 层查询邮箱+密码匹配的用户
         return tUser;
     }
 

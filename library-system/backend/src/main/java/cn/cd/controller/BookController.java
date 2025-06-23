@@ -18,21 +18,15 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/borrow")
-    public Object homePage() {
-        return bookService.HomePageService();
-    }
     private static final int MAX_INTEGER_DIGITS = 8;
     private static final int MAX_DECIMAL_DIGITS = 2;
 
-    @GetMapping("/page")
-    public AjaxResult getBooksByPage(
-            @RequestParam(defaultValue = "1") int currentPage,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String author,
-            @RequestParam(required = false) String isbn) {
-
+    @GetMapping("/pageQuery")
+    public AjaxResult getBooksByPageQuery(@RequestParam(defaultValue = "1") int currentPage,
+                                          @RequestParam(defaultValue = "10") int size,
+                                          @RequestParam(required = false) String name,
+                                          @RequestParam(required = false) String author,
+                                          @RequestParam(required = false) String isbn) {
         Page<TBook> page = bookService.getBooksByPage(currentPage, size, name, author, isbn);
         return AjaxResult.ok().setData(page);
     }
@@ -42,7 +36,6 @@ public class BookController {
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-
         return bookService.addBook(book) > 0
                 ? AjaxResult.ok("添加成功")
                 : AjaxResult.fail().setMessage("添加失败");
@@ -81,7 +74,7 @@ public class BookController {
                 ? AjaxResult.ok("成功删除" + result + "本图书")
                 : AjaxResult.fail("删除失败");
     }
-    @GetMapping("/detail")
+    @GetMapping("/getById")
     public AjaxResult getByBookDetail(@RequestParam Long id) {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
