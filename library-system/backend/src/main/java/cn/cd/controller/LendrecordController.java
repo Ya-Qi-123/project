@@ -17,18 +17,21 @@ public class LendrecordController
     @Autowired
     private LendService lendService;
 
+    // 分类别计数
     @GetMapping("/countByCategory")
     public Object countByCategory(){
         List<TLendrecord> countByCategory = lendService.countByCategory();
         return countByCategory;
     }
 
+    // 分书计数
     @GetMapping("/countByName")
     public Object countByName(){
         List<TLendrecord> countByName = lendService.countByName();
         return countByName;
     }
 
+    // 统计每个用户的借阅次数
     @GetMapping("/countByUserid")
     public Object countByUserid(){
         List<TLendrecord> countByUserid = lendService.countByUserid();
@@ -45,18 +48,22 @@ public class LendrecordController
         return AjaxResult.me().setMessage("添加成功");
     }
 
-    @PostMapping("/getByUseridAndSome") // 高级查询（含模糊查询）
+    // 通过用户id和其他条件对借阅表进行高级查询（含模糊查询）
+    @PostMapping("/getByUseridAndSome")
     public PageInfo<TLendrecord> getByUseridAndSome(@RequestBody LendQuery lendQuery){
         PageInfo<TLendrecord> list =lendService.getByUseridAndSome(lendQuery);
         return list;
     }
 
+    // 删除借阅记录
     @DeleteMapping("/deleteRecord")
     public Object deleteRecord(@RequestParam Long id){
         lendService.deleteRecord(id);
         return AjaxResult.me().setMessage("删除成功");
     }
-    @PutMapping("/updateRecord")
+
+    // 更改借阅记录中的状态
+    @PutMapping("/updateRecordStatus")
     public Object updateRecordStatus(@RequestParam Long id,@RequestParam Integer status){
         lendService.updateRecordStatus(id, status);
         return AjaxResult.me().setMessage("修改成功");

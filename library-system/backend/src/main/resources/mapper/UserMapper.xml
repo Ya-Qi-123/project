@@ -25,20 +25,23 @@
         values (#{username},#{password},#{email},#{phone})
     </insert>
 
-    <update id="update">
-        update t_user set username=#{username},password=#{password},email=#{email},
-                          phone=#{phone},age=#{age},gender=#{gender},status=#{status}
-        where id=#{id}
-    </update>
     <update id="updateStatus">
         update t_user set status=#{status} where id=#{id}
     </update>
+
+    <update id="updatePersonalInformation">
+        update t_user set username=#{username},email=#{email},phone=#{phone},gender=#{gender}
+        where id=#{id}
+    </update>
+
+    <update id="updatePassword">
+        update t_user set password=#{password} where id= #{id}
+    </update>
+
     <delete id="delete">
         delete from t_user where id=#{id}
     </delete>
-    <select id="getById" resultMap="BaseResultMap">
-        select * from t_user where id=#{id}
-    </select>
+
     <select id="getByUsername" resultMap="BaseResultMap">
         select * from t_user where username= #{username}
     </select>
@@ -54,4 +57,13 @@
     <select id="getByPhoneAndPassword" resultMap="BaseResultMap">
         select * from t_user where phone= #{phone} and password= #{password}
     </select>
+    <select id="getUseridById" resultType="java.lang.Long">
+        select user_id from t_lendrecord where id= #{id}
+    </select>
+    <select id="getPasswordById" resultType="java.lang.String">
+        select password
+        from t_user where id= #{id}
+    </select>
+
+
 </mapper>

@@ -28,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
 
     @Override
     public TUser loginServiceByPhoneAndPassword(String phone, String password) {
-        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password);
+        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password); // Mapper 层查询邮箱+密码匹配的用户
         return tUser;
     }
 
@@ -43,12 +43,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
         return tUserMapper.updateStatus(id, status);
     }
 
-
     @Override
     public int delete(Long id) {
-        return 0;
+        int temp = tUserMapper.delete(id);
+        return temp;
     }
 
+    @Override
+    public int updatePersonalInformation(Long id, String username, String email,
+                                         String phone, String gender) {
+        return tUserMapper.updatePersonalInformation(id, username, email, phone, gender);
+    }
 
 }
 
