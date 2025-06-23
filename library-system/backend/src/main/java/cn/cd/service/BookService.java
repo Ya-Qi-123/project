@@ -3,11 +3,13 @@ package cn.cd.service;
 import cn.cd.domain.TBook;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface BookService {
     List<TBook> HomePageService();
-    int addBook(TBook book);
+    int addBook(String isbn, String name, BigDecimal price,
+                String author, String publisher,String category);
     int updateBook(TBook book);
     int batchDeleteBooks(List<Long> ids);
     TBook getBookById(Long id);

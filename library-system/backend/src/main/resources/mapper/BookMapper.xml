@@ -11,7 +11,9 @@
     </insert>
     <update id="update">
         UPDATE t_book
-        SET name = #{name},isbn = #{isbn},author = #{author},price = #{price},publisher = #{publisher},status = #{status},category = #{category}
+        SET name = #{name},isbn = #{isbn},author = #{author},
+            price = #{price},publisher = #{publisher},
+            status = #{status},category = #{category}
         WHERE id = #{id}
     </update>
     <delete id="batchDeleteBooks" parameterType="java.util.List">
