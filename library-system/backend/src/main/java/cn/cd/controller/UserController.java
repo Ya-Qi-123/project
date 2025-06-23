@@ -80,7 +80,8 @@ public class UserController {
 
     // 用户个人信息修改
     @PostMapping("/updatePersonalInformation")
-    public Object update(Long id, String username, String email, String phone, String gender){
+    public Object update(@RequestParam Long id, String username,
+                         String email, String phone, String gender){
         int temp = tUserService.updatePersonalInformation(id, username, email, phone, gender);
         if(temp == 1){
             return AjaxResult.ok( "修改成功！");

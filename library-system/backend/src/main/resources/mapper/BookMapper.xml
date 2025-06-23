@@ -38,7 +38,7 @@
     <select id="getAll" resultType="cn.cd.domain.TBook">
         select * from t_book
     </select>
-    <select id="selectPage" resultType="cn.cd.domain.TBook">
+    <select id="selectPageForAdmin" resultType="cn.cd.domain.TBook">
         SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">
@@ -51,5 +51,32 @@
                 AND isbn LIKE CONCAT('%', #{isbn}, '%')
             </if>
         </where>
+    </select>
+
+    <select id="selectPageForUser" resultType="cn.cd.domain.TBook">
+        SELECT name, author, isbn, category, publisher
+        FROM (
+        SELECT *,
+        ROW_NUMBER() OVER (
+        PARTITION by name, author, isbn, category
+        ORDER BY status DESC, id
+        ) AS row_num
+        FROM t_book
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <if test="author != null and author != ''">
+                AND author LIKE CONCAT('%', #{author}, '%')
+            </if>
+            <if test="isbn != null and isbn != ''">
+                AND isbn LIKE CONCAT('%', #{isbn}, '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
+        </where>
+        ) AS grouped_books
+        WHERE row_num = 1
     </select>
 </mapper>

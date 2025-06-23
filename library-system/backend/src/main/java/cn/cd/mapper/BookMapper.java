@@ -22,12 +22,18 @@ public interface BookMapper extends BaseMapper<TBook> {
 
     List<TBook> getAll();
 
-    // 分页查询
-    Page<TBook> selectPage(
+    // 管理员用的分页查询
+    Page<TBook> selectPageForAdmin(
             Page<TBook> page,
             @Param("name") String name,
             @Param("author") String author,
             @Param("isbn") String isbn);
 
-
+    // 用户用的分页查询
+    Page<TBook> selectPageForUser(
+            Page<TBook> page,
+            @Param("name") String name,
+            @Param("author") String author,
+            @Param("isbn") String isbn,
+            @Param("category") String category);
 }

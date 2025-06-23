@@ -21,18 +21,31 @@ public class BookController {
     private static final int MAX_INTEGER_DIGITS = 8;
     private static final int MAX_DECIMAL_DIGITS = 2;
 
-    @GetMapping("/page")
-    public AjaxResult getBooksByPage(
+    @GetMapping("/pageQueryForAdmin")
+    public AjaxResult getBooksByPageForAdmin(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String isbn) {
 
-        Page<TBook> page = bookService.getBooksByPage(currentPage, size, name,
-                author, isbn);
+        Page<TBook> page = bookService.getBooksByPageForAdmin(currentPage, size, name, author, isbn);
         return AjaxResult.ok().setData(page);
     }
+
+    @GetMapping("/pageQueryForUser")
+    public AjaxResult getBooksByPageForUser(
+            @RequestParam(defaultValue = "1") int currentPage,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) String category) {
+
+        Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
+        return AjaxResult.ok().setData(page);
+    }
+
     @PostMapping("/add")
     public AjaxResult addBook(
             @RequestParam String isbn,

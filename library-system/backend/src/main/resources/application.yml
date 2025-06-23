@@ -5,9 +5,9 @@ server:
 # 连接数据库的四大金刚
 spring:
   datasource:
-    username: djr
+    username: root
     password: 123456
-    url: jdbc:mysql://192.168.7.48:3306/library-system-database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/library-system-database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
 # mybatis配置
 mybatis:

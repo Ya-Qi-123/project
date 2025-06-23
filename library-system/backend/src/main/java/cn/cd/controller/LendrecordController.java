@@ -40,10 +40,8 @@ public class LendrecordController
 
     // 增加借阅记录
     @PostMapping("/addRecord")
-    public Object addRecord(@RequestParam Long book_id,
-                            @RequestParam Long user_id,
-                            @RequestParam String category,
-                            @RequestParam String bookname){
+    public Object addRecord(@RequestParam Long book_id, @RequestParam Long user_id,
+                            @RequestParam String category, @RequestParam String bookname){
         lendService.addRecord(book_id, user_id, category, bookname);
         return AjaxResult.me().setMessage("添加成功");
     }
