@@ -45,9 +45,9 @@ public class LendServiceImpl
     }
 
     @Override
-    public PageInfo<TLendrecord> getByUseridAndSome(LendQuery lendquery) {
+    public PageInfo<TLendrecord> pageQuery(LendQuery lendquery) {
         PageHelper.startPage(lendquery.getCurrentPage(),lendquery.getPageSize());
-        List<TLendrecord> list =  lendrecordMapper.getByUseridAndSome(lendquery);
+        List<TLendrecord> list =  lendrecordMapper.pageQuery(lendquery);
         return new PageInfo<>(list);
     }
 
@@ -59,5 +59,6 @@ public class LendServiceImpl
     public void updateRecordStatus(Long id, Integer status) {
         lendrecordMapper.updateRecordStatus(id, status);
     }
+
 
 }

@@ -20,8 +20,9 @@ public interface LendrecordMapper
     void addRecord(Long book_id, Long user_id, String category, String bookname);
 
     // 查看当前用户的所有记录
-    List<TLendrecord> getByUseridAndSome(LendQuery lendquery);
+    List<TLendrecord> pageQuery(LendQuery lendquery);
 
 
     Integer getStatus(Long user_id);
+
 }

@@ -46,10 +46,10 @@ public class LendrecordController
         return AjaxResult.me().setMessage("添加成功");
     }
 
-    // 通过用户id和其他条件对借阅表进行高级查询（含模糊查询）
-    @PostMapping("/getByUseridAndSome")
-    public PageInfo<TLendrecord> getByUseridAndSome(@RequestBody LendQuery lendQuery){
-        PageInfo<TLendrecord> list =lendService.getByUseridAndSome(lendQuery);
+    // 可以对借阅记录表进行查询，分页查询+高级查询
+    @PostMapping("/pageQuery")
+    public PageInfo<TLendrecord> pageQuery(@RequestBody LendQuery lendquery){
+        PageInfo<TLendrecord> list =lendService.pageQuery(lendquery);
         return list;
     }
 
@@ -66,4 +66,5 @@ public class LendrecordController
         lendService.updateRecordStatus(id, status);
         return AjaxResult.me().setMessage("修改成功");
     }
+
 }

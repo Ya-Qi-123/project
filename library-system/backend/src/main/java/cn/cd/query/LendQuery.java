@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class LendQuery {
     private Integer currentPage = 1;
-    private Integer pageSize = 3;
+    private Integer pageSize = 5;
 
     private String book_id;
     private String user_id;
