@@ -41,9 +41,18 @@
         select count(*) as userRentNum, user_id
         from t_lendrecord group by user_id
     </select>
-    <select id="getByUseridAndSome" resultMap = "LendrecordMap">
-        select * from t_lendrecord
+
+    <select id="getStatus" resultType="Integer">
+        select sum(status) from t_lendrecord
         where user_id = #{user_id}
+    </select>
+
+    <select id="pageQuery" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord
+        where
+        <if test="user_id != null and user_id != ''">
+            user_id = #{user_id}
+        </if>
         <if test="book_id != null and book_id != ''">
             and book_id = #{book_id}
         </if>

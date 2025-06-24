@@ -20,6 +20,12 @@ public class LendServiceImpl
     @Autowired
     private LendrecordMapper lendrecordMapper;
 
+
+    @Override
+    public Integer getStatus(Long user_id) {
+        return lendrecordMapper.getStatus(user_id);
+    }
+
     @Override
     public List<TLendrecord> countByCategory() {
         return lendrecordMapper.countByCategory();
@@ -39,9 +45,9 @@ public class LendServiceImpl
     }
 
     @Override
-    public PageInfo<TLendrecord> getByUseridAndSome(LendQuery lendquery) {
+    public PageInfo<TLendrecord> pageQuery(LendQuery lendquery) {
         PageHelper.startPage(lendquery.getCurrentPage(),lendquery.getPageSize());
-        List<TLendrecord> list =  lendrecordMapper.getByUseridAndSome(lendquery);
+        List<TLendrecord> list =  lendrecordMapper.pageQuery(lendquery);
         return new PageInfo<>(list);
     }
 
@@ -53,5 +59,6 @@ public class LendServiceImpl
     public void updateRecordStatus(Long id, Integer status) {
         lendrecordMapper.updateRecordStatus(id, status);
     }
+
 
 }

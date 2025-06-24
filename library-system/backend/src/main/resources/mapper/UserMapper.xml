@@ -64,6 +64,10 @@
         select password
         from t_user where id= #{id}
     </select>
+    <select id="getStatus" resultType="java.lang.Integer">
+        select status
+        from t_user where id= #{id}
+    </select>
 
 
 </mapper>

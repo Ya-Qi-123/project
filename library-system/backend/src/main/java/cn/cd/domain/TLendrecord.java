@@ -30,4 +30,5 @@ public class TLendrecord {
     private int categoryLendNum; //每个类的图书被借阅次数
     private int booknameLendNum; // 每种图书被借阅次数
     private int userRentNum; // 每个用户借书次数
+    private  int statusSum;
 }
