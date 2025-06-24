@@ -20,5 +20,6 @@ public interface LendService extends IService<TLendrecord> {
 
     void deleteRecord(Long id);
     void updateRecordStatus(Long id,Integer status);
+    TLendrecord getById(Long id);
 
 }
