@@ -49,27 +49,28 @@
 
     <select id="pageQuery" resultMap = "LendrecordMap">
         select * from t_lendrecord
-        where
-        <if test="user_id != null and user_id != ''">
-            user_id = #{user_id}
-        </if>
-        <if test="book_id != null and book_id != ''">
-            and book_id = #{book_id}
-        </if>
-        <if test="bookname != null and bookname != ''">
-            and bookname like concat('%',#{bookname},'%')
-        </if>
-        <if test="category != null and category != ''">
-            and category like concat('%',#{category},'%')
-        </if>
-        <if test="status != null ">
-            and status = #{status}
-        </if>
-        <choose>
-            <when test="status == null">
-                and status IN (0, 1)
-            </when>
-        </choose>
+        <where>
+            <if test="user_id != null and user_id != ''">
+                user_id = #{user_id}
+            </if>
+            <if test="book_id != null and book_id != ''">
+                AND book_id = #{book_id}
+            </if>
+            <if test="bookname != null and bookname != ''">
+                AND bookname LIKE CONCAT('%', #{bookname}, '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND category LIKE CONCAT('%', #{category}, '%')
+            </if>
+            <choose>
+                <when test="status != null">
+                    AND status = #{status}
+                </when>
+                <otherwise>
+                    AND status IN (0, 1)
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
 </mapper>
