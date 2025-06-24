@@ -16,6 +16,11 @@
             status = #{status},category = #{category}
         WHERE id = #{id}
     </update>
+    <update id="updateBookStatus">
+        UPDATE t_book
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
     <delete id="batchDeleteBooks" parameterType="java.util.List">
         DELETE FROM t_book
         WHERE id IN

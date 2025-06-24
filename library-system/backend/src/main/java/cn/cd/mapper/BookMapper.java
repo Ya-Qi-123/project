@@ -36,4 +36,6 @@ public interface BookMapper extends BaseMapper<TBook> {
             @Param("author") String author,
             @Param("isbn") String isbn,
             @Param("category") String category);
+
+    void updateBookStatus(Long id, Integer status);
 }

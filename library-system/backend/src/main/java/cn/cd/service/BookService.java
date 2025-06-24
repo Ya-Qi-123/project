@@ -21,4 +21,6 @@ public interface BookService {
     Page<TBook> getBooksByPageForUser(
             int current, int size, String name,
             String author, String isbn, String category);
+
+    void updateBookStatus(Long id, Integer status);
 }
