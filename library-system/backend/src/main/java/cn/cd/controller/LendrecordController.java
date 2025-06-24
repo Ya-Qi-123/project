@@ -63,6 +63,10 @@ public class LendrecordController
     // 更改借阅记录中的状态
     @PutMapping("/updateRecordStatus")
     public Object updateRecordStatus(@RequestParam Long id,@RequestParam Integer status){
+        TLendrecord lendrecord = lendService.getById(id);
+        if(lendrecord == null){
+            return AjaxResult.fail("该借阅记录不存在！");
+        }
         lendService.updateRecordStatus(id, status);
         return AjaxResult.me().setMessage("修改成功");
     }

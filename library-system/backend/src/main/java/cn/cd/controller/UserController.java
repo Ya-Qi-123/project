@@ -83,8 +83,8 @@ public class UserController {
 
     // 用户个人信息修改
     @PostMapping("/updatePersonalInformation")
-    public Object update(@RequestParam Long id, String username,
-                         String email, String phone, String gender) {
+    public Object update(@RequestParam Long id, @RequestParam String username,
+                         @RequestParam String email,@RequestParam String phone,String gender) {
         int temp = tUserService.updatePersonalInformation(id, username, email, phone, gender);
         if (temp == 1) {
             return AjaxResult.ok("修改成功！");
@@ -113,13 +113,17 @@ public class UserController {
     public Object updatePassword(@RequestParam Long id,
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword) {
-        TUser tUser = tUserService.getById(id);
-        if (tUser.getPassword().equals(oldPassword)) {
-            tUser.setPassword(newPassword);
-            tUserService.updateById(tUser);
-            return AjaxResult.ok("修改成功！");
-        } else {
-            return AjaxResult.fail("原密码错误！");
+        if(newPassword.equals(null) || newPassword.equals(oldPassword)){
+            return AjaxResult.fail("修改密码失败，新密码为空或与原密码相同。");
+        }else{
+            TUser tUser = tUserService.getById(id);
+            if (tUser.getPassword().equals(oldPassword)) {
+                tUser.setPassword(newPassword);
+                tUserService.updateById(tUser);
+                return AjaxResult.ok("修改密码成功！");
+            } else {
+                return AjaxResult.fail("修改失败，原密码错误！");
+            }
         }
     }
 }

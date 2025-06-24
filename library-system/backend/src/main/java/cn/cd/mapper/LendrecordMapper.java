@@ -23,7 +23,8 @@ public interface LendrecordMapper
     // 查看当前用户的所有记录
     List<TLendrecord> pageQuery(LendQuery lendquery);
 
+    TLendrecord getById( Long id);
 
-    Integer getStatus(Long user_id);
+    Integer getStatusSum(Long user_id);
 
 }
