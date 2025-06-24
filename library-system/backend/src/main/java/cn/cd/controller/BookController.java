@@ -86,6 +86,12 @@ public class BookController {
         bookService.updateBook(book);
         return AjaxResult.me().setMessage("更新成功");
     }
+
+    @PostMapping("updateStatus")
+    public AjaxResult updateStatus(Long id, Integer status) {
+        bookService.updateBookStatus(id, status);
+        return AjaxResult.me().setMessage("更新成功");
+    }
     @PostMapping("/batchDelete")
     public AjaxResult batchDeleteBooks(@RequestBody List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
@@ -96,7 +102,7 @@ public class BookController {
                 ? AjaxResult.ok("成功删除" + result + "本图书")
                 : AjaxResult.fail("删除失败");
     }
-    @GetMapping("/detail")
+    @GetMapping("/getById")
     public AjaxResult getByBookDetail(@RequestParam Long id) {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
@@ -106,6 +112,7 @@ public class BookController {
                 ? AjaxResult.ok(book)
                 : AjaxResult.fail("图书不存在");
     }
+
     private boolean isValidId(Long id) {
         return id != null && id > 0;
     }

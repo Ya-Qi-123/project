@@ -30,6 +30,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public void updateBookStatus(Long id, Integer status) {
+        bookMapper.updateBookStatus(id, status);
+    }
+
+    @Override
     public List<TBook> HomePageService() {
         return bookMapper.getAll();
     }
