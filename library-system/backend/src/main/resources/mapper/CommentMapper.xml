@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cd.mapper.CommentMapper">
+    <resultMap id="CommentResultMap" type="cn.cd.domain.TComment">
+        <id property="id" column="id"/>
+        <result property="isbn" column="isbn"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="rating" column="rating"/>
+        <result property="username" column="username"/>
+        <result property="bookName" column="book_name"/>
+    </resultMap>
+
+    <select id="selectPageByIsbn" resultMap="CommentResultMap">
+        SELECT c.*, u.username, b.name as book_name
+        FROM t_comment c
+                 LEFT JOIN t_user u ON c.user_id = u.id COLLATE utf8mb4_general_ci
+                 LEFT JOIN t_book b ON c.isbn = b.isbn COLLATE utf8mb4_general_ci
+        WHERE c.isbn = #{isbn}
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="selectPageByUserId" resultMap="CommentResultMap">
+        SELECT c.*, u.username, b.name as book_name
+        FROM t_comment c
+                 LEFT JOIN t_user u ON c.user_id = u.id COLLATE utf8mb4_general_ci
+                 LEFT JOIN t_book b ON c.isbn = b.isbn COLLATE utf8mb4_general_ci
+        WHERE c.user_id = #{userId}
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="getAverageRatingByIsbn" resultType="java.lang.Double">
+        SELECT AVG(rating) FROM t_comment WHERE isbn = #{isbn}
+    </select>
+
+    <delete id="deleteByIsbnAndUserId">
+        DELETE FROM t_comment WHERE isbn = #{isbn} AND user_id = #{userId}
+    </delete>
+</mapper>

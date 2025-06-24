@@ -23,4 +23,6 @@ public interface BookService {
             String author, String isbn, String category);
 
     void updateBookStatus(Long id, Integer status);
+
+    TBook getById(Long id);
 }
