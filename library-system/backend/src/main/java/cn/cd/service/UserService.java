@@ -15,4 +15,9 @@ public interface UserService extends IService<TUser> {
 
     int updatePersonalInformation(Long id, String username, String email, String phone, String gender);
 
+    TUser getByEmail(String email);
+
+    TUser getByPhone(String phone);
+
+    TUser getByUsername(String username);
 }

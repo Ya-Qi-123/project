@@ -54,6 +54,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, TUser>
         return tUserMapper.updatePersonalInformation(id, username, email, phone, gender);
     }
 
+    @Override
+    public TUser getByEmail(String email) {
+        return tUserMapper.getByEmail(email);
+    }
+
+    @Override
+    public TUser getByPhone(String phone) {
+        return tUserMapper.getByPhone(phone);
+    }
+
+    @Override
+    public TUser getByUsername(String username) {
+        return tUserMapper.getByUsername(username);
+    }
+
 }
 
 

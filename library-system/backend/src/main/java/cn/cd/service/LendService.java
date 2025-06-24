@@ -16,7 +16,7 @@ public interface LendService extends IService<TLendrecord> {
 
     void addRecord(Long book_id, Long user_id, String category, String bookname);
 
-    PageInfo<TLendrecord> pageQuery(LendQuery lendQuery);
+    PageInfo<TLendrecord> pageQuery(LendQuery lendquery);
 
     void deleteRecord(Long id);
     void updateRecordStatus(Long id,Integer status);

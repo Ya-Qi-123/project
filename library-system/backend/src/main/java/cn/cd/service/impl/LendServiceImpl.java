@@ -48,7 +48,7 @@ public class LendServiceImpl
     public PageInfo<TLendrecord> pageQuery(LendQuery lendquery) {
         PageHelper.startPage(lendquery.getCurrentPage(),lendquery.getPageSize());
         List<TLendrecord> list =  lendrecordMapper.pageQuery(lendquery);
-        return new PageInfo<>(list);
+        return new PageInfo<>( list);
     }
 
     @Override
