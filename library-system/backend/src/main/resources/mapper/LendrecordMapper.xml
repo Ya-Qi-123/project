@@ -57,5 +57,9 @@
             and status = #{status}
         </if>
     </select>
+    <select id="getStatus" resultType="Integer">
+        select sum(status) from t_lendrecord
+        where user_id = #{user_id}
+    </select>
 
 </mapper>

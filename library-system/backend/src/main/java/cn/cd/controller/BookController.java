@@ -92,6 +92,7 @@ public class BookController {
         bookService.updateBookStatus(id, status);
         return AjaxResult.me().setMessage("更新成功");
     }
+
     @PostMapping("/batchDelete")
     public AjaxResult batchDeleteBooks(@RequestBody List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
@@ -102,6 +103,7 @@ public class BookController {
                 ? AjaxResult.ok("成功删除" + result + "本图书")
                 : AjaxResult.fail("删除失败");
     }
+
     @GetMapping("/getById")
     public AjaxResult getByBookDetail(@RequestParam Long id) {
         if (!isValidId(id)) {

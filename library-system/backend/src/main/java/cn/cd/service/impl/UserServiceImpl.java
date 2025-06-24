@@ -1,6 +1,5 @@
 package cn.cd.service.impl;
 
-import cn.cd.service.LendService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TUser;
 import cn.cd.service.UserService;

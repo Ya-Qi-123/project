@@ -23,4 +23,5 @@ public interface LendrecordMapper
     List<TLendrecord> getByUseridAndSome(LendQuery lendquery);
 
 
+    Integer getStatus(Long user_id);
 }

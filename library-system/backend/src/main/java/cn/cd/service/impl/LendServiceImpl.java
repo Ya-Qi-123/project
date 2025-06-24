@@ -20,6 +20,12 @@ public class LendServiceImpl
     @Autowired
     private LendrecordMapper lendrecordMapper;
 
+
+    @Override
+    public Integer getStatus(Long user_id) {
+        return lendrecordMapper.getStatus(user_id);
+    }
+
     @Override
     public List<TLendrecord> countByCategory() {
         return lendrecordMapper.countByCategory();
