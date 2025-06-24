@@ -56,8 +56,8 @@ public class UserController {
                            @RequestParam String email,
                            @RequestParam String phone,
                            @RequestParam String password) {
-        TUser tUser1 = tUserService.loginServiceByEmailAndPassword(email, password);
-        TUser tUser2 = tUserService.loginServiceByPhoneAndPassword(phone, password);
+        TUser tUser1 = tUserService.getByEmail(email);
+        TUser tUser2 = tUserService.getByPhone(phone);
         if (tUser1 != null || tUser2 != null) {
             return AjaxResult.fail("注册失败,邮箱或手机号已注册");
         }
@@ -96,7 +96,8 @@ public class UserController {
     // 删除用户
     @DeleteMapping("/deleteById")
     public Object delete(@RequestParam Long id) {
-        if(lendService.getStatus(id) != 0){
+        Integer statusSum = lendService.getStatus(id);
+        if(statusSum != null && statusSum > 0){
             return AjaxResult.fail("该用户有未还的图书，请先还图书！");
         }
         int temp = tUserService.delete(id);

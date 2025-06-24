@@ -43,11 +43,11 @@
     </select>
 
     <select id="getStatus" resultType="Integer">
-        select sum(status) from t_lendrecord
+        select sum(status) as statusSum from t_lendrecord
         where user_id = #{user_id}
     </select>
 
-    <select id="pageQuery" resultType="cn.cd.domain.TLendrecord">
+    <select id="pageQuery" resultMap = "LendrecordMap">
         select * from t_lendrecord
         where
         <if test="user_id != null and user_id != ''">
@@ -62,9 +62,14 @@
         <if test="category != null and category != ''">
             and category like concat('%',#{category},'%')
         </if>
-        <if test="status != null">
+        <if test="status != null ">
             and status = #{status}
         </if>
+        <choose>
+            <when test="status == null">
+                and status IN (0, 1)
+            </when>
+        </choose>
     </select>
 
 </mapper>

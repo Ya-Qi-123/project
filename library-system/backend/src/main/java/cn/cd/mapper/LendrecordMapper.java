@@ -3,6 +3,7 @@ package cn.cd.mapper;
 import cn.cd.domain.TLendrecord;
 import cn.cd.query.LendQuery;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.pagehelper.PageInfo;
 
 
 import java.util.List;

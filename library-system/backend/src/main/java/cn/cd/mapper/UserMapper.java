@@ -23,6 +23,8 @@ public interface UserMapper extends BaseMapper<TUser> {
     int register(String username, String password, String email, String phone);
 
     int getStatus(Long id);
+
+    TUser getByUsername(String username);
 }
 
 
