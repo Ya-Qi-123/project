@@ -28,6 +28,7 @@
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
+        AND status != 0
     </delete>
 
     <select id="getById" resultType="cn.cd.domain.TBook">

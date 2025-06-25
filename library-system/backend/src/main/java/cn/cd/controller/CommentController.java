@@ -33,7 +33,7 @@ public class CommentController {
 
     @PostMapping
     public AjaxResult addComment(@RequestBody TComment comment) {
-        comment.setId(null);
+
         boolean success = commentService.addComment(comment);
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }

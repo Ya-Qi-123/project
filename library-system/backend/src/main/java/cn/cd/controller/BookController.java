@@ -113,6 +113,7 @@ public class BookController {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }
+
         TBook book = bookService.getBookById(id);
         return book != null
                 ? AjaxResult.ok(book)
