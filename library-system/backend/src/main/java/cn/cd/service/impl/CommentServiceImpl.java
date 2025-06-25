@@ -27,7 +27,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
 
     @Override
     public boolean addComment(TComment comment) {
-        return save(comment);
+        return commentMapper.save(comment);
     }
 
     @Override

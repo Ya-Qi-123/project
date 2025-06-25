@@ -19,7 +19,4 @@ public class TComment {
     @TableField("rating")
     private Integer rating = 5;
 
-
-    private String username;
-    private String bookName;
 }

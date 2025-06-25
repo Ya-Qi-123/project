@@ -64,12 +64,14 @@ public class BookServiceImpl implements BookService {
         return bookMapper.update(book);
     }
 
+
+
     @Override
     public TBook getBookById(Long id) {
         return bookMapper.getById(id);
     }
     @Override
-    public int batchDeleteBooks(List<Long> ids) {
+    public int batchDeleteBooks(List<Long> ids ) {
         return bookMapper.batchDeleteBooks(ids);
     }
 
