@@ -53,15 +53,15 @@ public class UserController {
     // 用户的注册
     @PostMapping("/register")
     public Object register(@RequestParam String username,
+                           @RequestParam String password,
                            @RequestParam String email,
-                           @RequestParam String phone,
-                           @RequestParam String password) {
+                           @RequestParam String phone) {
         TUser tUser1 = tUserService.getByEmail(email);
         TUser tUser2 = tUserService.getByPhone(phone);
         if (tUser1 != null || tUser2 != null) {
             return AjaxResult.fail("注册失败,邮箱或手机号已注册");
         }
-        int temp = tUserService.registerService(username, email, phone, password);
+        int temp = tUserService.registerService(username, password, email, phone);
         if (temp == 1) {
             return AjaxResult.ok("注册成功！");
         } else {
