@@ -17,4 +17,6 @@ public interface CommentMapper extends BaseMapper<TComment> {
 
     // 根据ISBN和用户ID删除评论
     int deleteByIsbnAndUserId(@Param("isbn") String isbn, @Param("userId") Long userId);
+
+    boolean save(TComment comment);
 }
