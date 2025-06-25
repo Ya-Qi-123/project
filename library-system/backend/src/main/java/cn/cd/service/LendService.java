@@ -22,4 +22,8 @@ public interface LendService extends IService<TLendrecord> {
     void updateRecordStatus(Long id,Integer status);
     TLendrecord getById(Long id);
 
+    Long getBookidById(Long id);
+
+    List<TLendrecord> getSoonRecord(Long userId);
+    List<TLendrecord> getOverTimeRecord(Long userId);
 }

@@ -65,5 +65,20 @@ public class LendServiceImpl
         return lendrecordMapper.getById(id);
     }
 
+    @Override
+    public Long getBookidById(Long id) {
+        return lendrecordMapper.getBookidById(id);
+    }
+
+    @Override
+    public List<TLendrecord> getSoonRecord(Long userId) {
+        return lendrecordMapper.getSoonRecord(userId);
+    }
+
+    @Override
+    public List<TLendrecord> getOverTimeRecord(Long userId) {
+        return lendrecordMapper.getOverTimeRecord(userId);
+    }
+
 
 }

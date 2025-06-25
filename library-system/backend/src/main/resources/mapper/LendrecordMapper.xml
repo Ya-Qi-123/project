@@ -20,11 +20,13 @@
         VALUES (#{user_id}, #{book_id}, #{category}, NOW(),
                 DATE_ADD(NOW(), INTERVAL 30 DAY), #{bookname}, 1)
     </insert>
+
     <update id="updateRecordStatus">
         UPDATE t_lendrecord
         SET status = #{status}
         WHERE id = #{id}
     </update>
+
     <delete id="deleteRecord">
         DELETE FROM t_lendrecord WHERE id = #{id}
     </delete>
@@ -78,8 +80,26 @@
             </choose>
         </where>
     </select>
+
     <select id="getById" resultType="cn.cd.domain.TLendrecord">
         select * from t_lendrecord where id = #{id}
     </select>
+
+    <select id="getBookidById" resultType="java.lang.Long">
+        select book_id from t_lendrecord where id = #{id}
+    </select>
+
+    <!-- 获取已经超时的借阅记录 -->
+    <select id="getOverTimeRecord" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord
+        where user_id = #{userId} and status = 1 and NOW() > return_time
+    </select>
+
+    <!-- 获取即将到期的借阅记录 -->
+    <select id="getSoonRecord" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord
+        where user_id = #{userId} and status = 1 and DATE_SUB(NOW(), INTERVAL 5 DAY) > return_time
+    </select>
+
 
 </mapper>
