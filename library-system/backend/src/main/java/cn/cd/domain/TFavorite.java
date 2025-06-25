@@ -7,8 +7,8 @@ import lombok.Data;
 @TableName("t_favorite")
 public class TFavorite {
     private Long id;
-    private Long bookId;
-    private Long userId;
+    private Long isbn;
+    private Long user_id;
     private String bookName;
     private String author;
 }
