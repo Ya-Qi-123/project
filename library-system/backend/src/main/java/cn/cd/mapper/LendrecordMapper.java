@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.PageInfo;
 
 
+import java.time.Instant;
 import java.util.List;
 
 public interface LendrecordMapper
@@ -27,4 +28,8 @@ public interface LendrecordMapper
 
     Integer getStatusSum(Long user_id);
 
+    Long getBookidById(Long id);
+
+    List<TLendrecord> getOverTimeRecord(Long userId);
+    List<TLendrecord> getSoonRecord(Long userId);
 }

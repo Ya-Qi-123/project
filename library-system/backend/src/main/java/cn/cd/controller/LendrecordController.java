@@ -2,12 +2,12 @@ package cn.cd.controller;
 
 import cn.cd.domain.TLendrecord;
 import cn.cd.query.LendQuery;
+import cn.cd.service.BookService;
 import cn.cd.service.LendService;
 import cn.cd.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -16,6 +16,8 @@ public class LendrecordController
 {
     @Autowired
     private LendService lendService;
+    @Autowired
+    private BookService bookService;
 
     // 分类别计数
     @GetMapping("/countByCategory")
@@ -43,6 +45,7 @@ public class LendrecordController
     public Object addRecord(@RequestParam Long book_id, @RequestParam Long user_id,
                             @RequestParam String category, @RequestParam String bookname){
         lendService.addRecord(book_id, user_id, category, bookname);
+        bookService.updateBookStatus(book_id, 0);
         return AjaxResult.me().setMessage("添加成功");
     }
 
@@ -60,7 +63,7 @@ public class LendrecordController
         return AjaxResult.me().setMessage("删除成功");
     }
 
-    // 更改借阅记录中的状态
+    // 归还图书时，更改借阅记录中的状态
     @PutMapping("/updateRecordStatus")
     public Object updateRecordStatus(@RequestParam Long id,@RequestParam Integer status){
         TLendrecord lendrecord = lendService.getById(id);
@@ -68,7 +71,21 @@ public class LendrecordController
             return AjaxResult.fail("该借阅记录不存在！");
         }
         lendService.updateRecordStatus(id, status);
+        bookService.updateBookStatus(lendService.getBookidById(id), 1);  //归还图书之后，将图书的状态改为在库
         return AjaxResult.me().setMessage("修改成功");
+    }
+
+    @GetMapping("/Reminder")
+    public Object Reminder(@RequestParam Long user_id) {
+        List<TLendrecord> OverRecords = lendService.getOverTimeRecord(user_id);
+        List<TLendrecord> SoonRecords = lendService.getSoonRecord(user_id);
+
+        if(OverRecords.size() > 0){
+            return "你有图书超时了";
+        }else if(SoonRecords.size() > 0){
+            return "你有图书即将到期";
+        }
+        return "无到期或超时图书";
     }
 
 }

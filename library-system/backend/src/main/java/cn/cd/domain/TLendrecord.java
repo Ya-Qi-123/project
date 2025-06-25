@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import static java.sql.DriverManager.println;
+
 @Data
 @TableName(value ="t_lendrecord")
 public class TLendrecord {
@@ -31,4 +36,9 @@ public class TLendrecord {
     private int booknameLendNum; // 每种图书被借阅次数
     private int userRentNum; // 每个用户借书次数
     private  int statusSum;
+
+    public String getReturn_time(){
+        println("getReturn_time"+return_time);
+        return return_time;
+    }
 }
