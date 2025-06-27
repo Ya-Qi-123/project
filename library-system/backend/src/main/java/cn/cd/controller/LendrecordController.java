@@ -4,6 +4,7 @@ import cn.cd.domain.TLendrecord;
 import cn.cd.query.LendQuery;
 import cn.cd.service.BookService;
 import cn.cd.service.LendService;
+import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class LendrecordController
     private LendService lendService;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserService userService;
 
     // 分类别计数
     @GetMapping("/countByCategory")
@@ -42,8 +45,12 @@ public class LendrecordController
 
     // 增加借阅记录
     @PostMapping("/addRecord")
-    public Object addRecord(@RequestParam Long book_id, @RequestParam Long user_id,
-                            @RequestParam String category, @RequestParam String bookname){
+    public Object addRecord(@RequestParam String isbn,
+                            @RequestParam String phone){
+        Long book_id = bookService.getByISBN(isbn).getId();
+        Long user_id = userService.getByPhone(phone).getId();
+        String category = bookService.getById(book_id).getCategory();
+        String bookname = bookService.getById(book_id).getName();
         lendService.addRecord(book_id, user_id, category, bookname);
         bookService.updateBookAvailableQuantity(book_id, -1);
         return AjaxResult.me().setMessage("添加成功");

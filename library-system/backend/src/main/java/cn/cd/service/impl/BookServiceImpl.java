@@ -44,8 +44,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBookAvailableQuantity(Long id, int changeNum) {
-        bookMapper.updateBookAvailableQuantity(id, changeNum);
+    public void updateBookAvailableQuantity(Long id, int quantity) {
+        bookMapper.updateBookAvailableQuantity(id, quantity);
     }
 
     @Override
