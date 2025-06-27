@@ -1,5 +1,6 @@
 package cn.cd.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -17,6 +18,15 @@ public class TBook {
     private BigDecimal price;
     private String author;
     private String publisher;
-    private String status;
     private String category;
+    private String language;
+    private String introduction;
+
+    @TableField(value = "cover_image")
+    private String cover_image;
+
+    @TableField(value = "total_quantity")
+    private int total_quantity;
+    @TableField(value = "available_quantity")
+    private int available_quantity;
 }

@@ -37,14 +37,25 @@ public class BookServiceImpl implements BookService {
         return bookMapper.selectPageForUser(page, name, author, isbn, category);
     }
 
-    @Override
-    public void updateBookStatus(Long id, Integer status) {
-        bookMapper.updateBookStatus(id, status);
-    }
 
     @Override
     public TBook getById(Long id) {
         return bookMapper.getById(id);
+    }
+
+    @Override
+    public void updateBookAvailableQuantity(Long id, int changeNum) {
+        bookMapper.updateBookAvailableQuantity(id, changeNum);
+    }
+
+    @Override
+    public int gatAvailableQuantityById(Long id) {
+        return bookMapper.gatAvailableQuantityById(id);
+    }
+
+    @Override
+    public int gatTotalQuantityById(Long id) {
+        return bookMapper.gatTotalQuantityById(id);
     }
 
 
@@ -55,8 +66,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public int addBook(String isbn, String name, BigDecimal price,
-                       String author, String publisher, String category) {
-        return bookMapper.add(isbn,name,price, author,publisher,category);
+                       String author, String publisher,String category,
+                       String language, String introduction, int total_quantity) {
+        return bookMapper.add(isbn, name, price, author, publisher, category,
+                language, introduction, total_quantity);
     }
 
     @Override
@@ -64,15 +77,24 @@ public class BookServiceImpl implements BookService {
         return bookMapper.update(book);
     }
 
-
-
     @Override
     public TBook getBookById(Long id) {
         return bookMapper.getById(id);
     }
+
+    @Override
+    public TBook getByISBN(String isbn) {
+        return bookMapper.getByISBN(isbn);
+    }
+
     @Override
     public int batchDeleteBooks(List<Long> ids ) {
         return bookMapper.batchDeleteBooks(ids);
+    }
+
+    @Override
+    public void updateTotalAndAvailable(Long id, int changeNum) {
+        bookMapper.updateTotalAndAvailable(id, changeNum);
     }
 
 }

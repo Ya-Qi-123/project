@@ -3,22 +3,48 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.cd.mapper.BookMapper">
+    <resultMap id="BaseResultMap" type="cn.cd.domain.TBook">
+        <id property="id" column="id"/>
+        <result property="isbn" column="isbn"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="author" column="author"/>
+        <result property="publisher" column="publisher"/>
+        <result property="category" column="category"/>
+        <result property="language" column="language"/>
+        <result property="introduction" column="introduction"/>
+        <result property="total_quantity" column="total_quantity"/>
+        <result property="available_quantity" column="available_quantity"/>
+    </resultMap>
 
+    <!-- 添加图书时，默认将在库数量设置为馆藏数量 -->
     <insert id="add">
         INSERT INTO t_book
-            (name, isbn, author, price, publisher, status, category)
-        VALUES (#{name}, #{isbn}, #{author}, #{price}, #{publisher}, 1, #{category})
+            (isbn, name, price, author, publisher,category,language,
+             introduction, total_quantity, available_quantity)
+        VALUES ( #{isbn}, #{name}, #{price}, #{author}, #{publisher}, #{category},#{language},
+                #{introduction}, #{total_quantity}, #{total_quantity})
     </insert>
+
     <update id="update">
         UPDATE t_book
-        SET name = #{name},isbn = #{isbn},author = #{author},
-            price = #{price},publisher = #{publisher},
-            status = #{status},category = #{category}
+        SET isbn = #{isbn}, name = #{name}, price = #{price}, author = #{author},
+            publisher = #{publisher}, category = #{category}, language = #{language},
+            introduction = #{introduction}, cover_image = #{cover_image},
+            total_quantity = #{total_quantity}, available_quantity = #{available_quantity}
         WHERE id = #{id}
     </update>
-    <update id="updateBookStatus">
+
+    <!-- 更新图书在库数量，如果借书，将quantity设置为负数 -->
+    <update id="updateBookAvailableQuantity">
         UPDATE t_book
-        SET status = #{status}
+        SET available_quantity = available_quantity + #{quantity}
+        WHERE id = #{id}
+    </update>
+    <update id="updateTotalAndAvailable">
+        UPDATE t_book
+        SET total_quantity = total_quantity + #{quantity},
+            available_quantity = available_quantity + #{quantity}
         WHERE id = #{id}
     </update>
 
@@ -67,14 +93,7 @@
     </select>
 
     <select id="selectPageForUser" resultType="cn.cd.domain.TBook">
-        SELECT name, author, isbn, category, publisher
-        FROM (
-        SELECT *,
-        ROW_NUMBER() OVER (
-        PARTITION by name, author, isbn, category
-        ORDER BY status DESC, id
-        ) AS row_num
-        FROM t_book
+        SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">
                 AND name LIKE CONCAT('%', #{name}, '%')
@@ -89,7 +108,13 @@
                 AND category = #{category}
             </if>
         </where>
-        ) AS grouped_books
-        WHERE row_num = 1
+    </select>
+
+    <select id="gatAvailableQuantityById" resultType="java.lang.Integer">
+        SELECT available_quantity FROM t_book WHERE id = #{id}
+    </select>
+
+    <select id="gatTotalQuantityById" resultType="java.lang.Integer">
+        select total_quantity from t_book where id = #{id}
     </select>
 </mapper>

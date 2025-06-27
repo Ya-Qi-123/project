@@ -8,11 +8,16 @@ import java.util.List;
 
 public interface BookService {
     List<TBook> HomePageService();
+
     int addBook(String isbn, String name, BigDecimal price,
-                String author, String publisher,String category);
+                String author, String publisher,String category,
+                String language, String introduction, int total_quantity);
+
     int updateBook(TBook book);
     int batchDeleteBooks(List<Long> ids);
+    void updateTotalAndAvailable(Long id, int changeNum);
     TBook getBookById(Long id);
+    TBook getByISBN(String isbn);
     // 增加分页查询接口方法
     Page<TBook> getBooksByPageForAdmin(
             int current, int size,
@@ -22,7 +27,11 @@ public interface BookService {
             int current, int size, String name,
             String author, String isbn, String category);
 
-    void updateBookStatus(Long id, Integer status);
 
     TBook getById(Long id);
+    void updateBookAvailableQuantity(Long id, int changeNum);
+
+    int gatAvailableQuantityById(Long id);
+
+    int gatTotalQuantityById(Long id);
 }

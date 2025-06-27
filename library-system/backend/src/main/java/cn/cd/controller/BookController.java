@@ -48,18 +48,20 @@ public class BookController {
 
     @PostMapping("/add")
     public AjaxResult addBook(
-            @RequestParam String isbn,
-            @RequestParam String name,
-            @RequestParam String author,
-            @RequestParam BigDecimal price,
-            @RequestParam String publisher,
-            @RequestParam String category) {
-        String errorMsg = validateBookFields(isbn, name, price,
-                author, publisher, category);
+            @RequestParam String isbn, @RequestParam String name, @RequestParam String author,
+            @RequestParam BigDecimal price, @RequestParam String publisher,
+            @RequestParam String category, @RequestParam String language,
+            @RequestParam String introduction, @RequestParam int total_quantity) {
+        // 做空判断，若为空，则报错
+        String errorMsg = validateBookFields(isbn, name, price, author, publisher, category);
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-        bookService.addBook(isbn, name, price, author, publisher, category);
+        if(bookService.getByISBN(isbn) != null){
+            return AjaxResult.fail("添加失败！该图书已存在");
+        }
+        bookService.addBook(isbn, name, price, author, publisher, category,
+                language, introduction, total_quantity);
         return AjaxResult.me().setMessage("添加成功");
 
     }
@@ -72,8 +74,22 @@ public class BookController {
                 : AjaxResult.ok(Collections.emptyList());
     }
 
-    @PostMapping("/update")
-    public AjaxResult updateBook(TBook  book) {
+    // 修改图书的馆藏数量
+    @PostMapping("/update/TotalQuantity")
+    public AjaxResult updateTotalQuantity(@RequestParam Long id, @RequestParam int changeNum) {
+        if(changeNum > 0){
+            bookService.updateBookAvailableQuantity(id, changeNum);
+        }else if(changeNum < 0 && Math.abs(changeNum) < bookService.gatAvailableQuantityById(id)){
+            bookService.updateBookAvailableQuantity(id, changeNum);
+        }else if (changeNum < 0 && Math.abs(changeNum) > bookService.gatTotalQuantityById(id)) {
+            return AjaxResult.fail("修改失败！馆藏数量不足");
+        }else if(changeNum < 0 && Math.abs(changeNum) > bookService.gatAvailableQuantityById(id)){
+            return AjaxResult.fail("修改失败！在库数量不足");
+        }
+        return AjaxResult.me().setMessage("修改成功");
+    }
+    @PostMapping("/updateAll")
+    public AjaxResult updateBook(@RequestBody TBook  book) {
         if (!isValidId(book.getId())) {
             return AjaxResult.fail("图书ID格式错误");
         }
@@ -91,11 +107,6 @@ public class BookController {
         return AjaxResult.me().setMessage("更新成功");
     }
 
-    @PostMapping("updateStatus")
-    public AjaxResult updateStatus(Long id, Integer status) {
-        bookService.updateBookStatus(id, status);
-        return AjaxResult.me().setMessage("更新成功");
-    }
 
     @PostMapping("/batchDelete")
     public AjaxResult batchDeleteBooks(@RequestBody List<Long> ids) {

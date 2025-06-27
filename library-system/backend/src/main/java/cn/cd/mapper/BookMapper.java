@@ -11,15 +11,17 @@ import java.util.List;
 
 public interface BookMapper extends BaseMapper<TBook> {
     int add(String isbn, String name, BigDecimal price,
-            String author, String publisher,String category);
+            String author, String publisher,String category,
+            String language, String introduction, int total_quantity);
+
     int update(TBook book);
+
     int batchDeleteBooks(List<Long> ids);
 
     TBook getById(Long id);
     TBook getByName(String name);
     TBook getByAuthor(String author);
     TBook getByISBN(String isbn);
-
     List<TBook> getAll();
 
     // 管理员用的分页查询
@@ -37,5 +39,10 @@ public interface BookMapper extends BaseMapper<TBook> {
             @Param("isbn") String isbn,
             @Param("category") String category);
 
-    void updateBookStatus(Long id, Integer status);
+    void updateBookAvailableQuantity(Long id, Integer status);
+    void updateTotalAndAvailable(Long id, int changeNum);
+
+    int gatAvailableQuantityById(Long id);
+
+    int gatTotalQuantityById(Long id);
 }

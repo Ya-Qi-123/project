@@ -45,7 +45,7 @@ public class LendrecordController
     public Object addRecord(@RequestParam Long book_id, @RequestParam Long user_id,
                             @RequestParam String category, @RequestParam String bookname){
         lendService.addRecord(book_id, user_id, category, bookname);
-        bookService.updateBookStatus(book_id, 0);
+        bookService.updateBookAvailableQuantity(book_id, -1);
         return AjaxResult.me().setMessage("添加成功");
     }
 
@@ -71,7 +71,8 @@ public class LendrecordController
             return AjaxResult.fail("该借阅记录不存在！");
         }
         lendService.updateRecordStatus(id, status);
-        bookService.updateBookStatus(lendService.getBookidById(id), 1);  //归还图书之后，将图书的状态改为在库
+        Long book_id = lendService.getBookidById(id);
+        bookService.updateBookAvailableQuantity(book_id, 1);
         return AjaxResult.me().setMessage("修改成功");
     }
 
