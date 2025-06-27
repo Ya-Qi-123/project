@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("t_comment")
-public class TComment {
-    private Long id;
+@TableName("t_favorite")
+public class TFavor {
+    private Long id; // 添加id字段，数据库自增
 
     @TableField("isbn")
     private String isbn;
@@ -15,10 +15,9 @@ public class TComment {
     @TableField("user_id")
     private Long userId;
 
-    @TableField("content")
-    private String content;
+    @TableField("book_name")
+    private String bookName;
 
-    @TableField("rating")
-    private Integer rating = 5;
-
+    @TableField("author")
+    private String author;
 }

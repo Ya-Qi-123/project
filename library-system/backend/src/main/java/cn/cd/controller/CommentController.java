@@ -16,18 +16,16 @@ public class CommentController {
     @GetMapping("/isbn/{isbn}")
     public AjaxResult getCommentsByIsbn(
             @PathVariable String isbn,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        Page<TComment> comments = commentService.getCommentsByIsbn(isbn, page, size);
+            @RequestParam(defaultValue = "1") Integer page) {
+        Page<TComment> comments = commentService.getCommentsByIsbn(isbn, page, 10);
         return AjaxResult.ok(comments);
     }
 
     @GetMapping("/user/{userId}")
     public AjaxResult getCommentsByUserId(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        Page<TComment> comments = commentService.getCommentsByUserId(userId, page, size);
+            @RequestParam(defaultValue = "1") Integer page) {
+        Page<TComment> comments = commentService.getCommentsByUserId(userId, page, 10);
         return AjaxResult.ok(comments);
     }
 
@@ -38,14 +36,11 @@ public class CommentController {
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }
 
-    @DeleteMapping
-    public AjaxResult deleteComment(
-            @RequestParam String isbn,
-            @RequestParam Long userId) {
-        boolean success = commentService.deleteComment(isbn, userId);
+    @DeleteMapping("/{id}")
+    public AjaxResult deleteComment(@PathVariable Long id) {
+        boolean success = commentService.deleteComment(id);
         return success ? AjaxResult.ok("评论删除成功") : AjaxResult.fail("评论删除失败");
     }
-
     // 获取图书平均评分
     @GetMapping("/rating/{isbn}")
     public AjaxResult getAverageRating(@PathVariable String isbn) {

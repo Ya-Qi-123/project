@@ -9,7 +9,7 @@ public interface CommentService extends IService<TComment> {
     Page<TComment> getCommentsByUserId(Long userId, Integer page, Integer size);
 
     boolean addComment(TComment comment);
-    boolean deleteComment(String isbn, Long userId);
+    boolean deleteComment(Long id);
 
     Double getAverageRating(String isbn);
 }

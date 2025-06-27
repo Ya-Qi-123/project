@@ -15,8 +15,8 @@ public interface CommentMapper extends BaseMapper<TComment> {
     // 计算某ISBN图书的平均评分
     Double getAverageRatingByIsbn(@Param("isbn") String isbn);
 
-    // 根据ISBN和用户ID删除评论
-    int deleteByIsbnAndUserId(@Param("isbn") String isbn, @Param("userId") Long userId);
+    // 根据ID删除评论 [修改点]
+    int deleteById(@Param("id") Long id);
 
     boolean save(TComment comment);
 }

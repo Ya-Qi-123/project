@@ -13,20 +13,33 @@ import com.baomidou.mybatisplus.annotation.IdType;
 public class TBook {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
+    @TableField(value = "isbn")
     private String isbn;
+
+    @TableField(value = "name")
     private String name;
+
+    @TableField(value = "price")
     private BigDecimal price;
     private String author;
+
+    @TableField(value = "publisher")
     private String publisher;
+
+    @TableField(value = "category")
     private String category;
+
+    @TableField(value = "language")
     private String language;
+
+    @TableField(value = "introduction")
     private String introduction;
 
-    @TableField(value = "cover_image")
-    private String cover_image;
 
     @TableField(value = "total_quantity")
     private int total_quantity;
+
     @TableField(value = "available_quantity")
     private int available_quantity;
 }

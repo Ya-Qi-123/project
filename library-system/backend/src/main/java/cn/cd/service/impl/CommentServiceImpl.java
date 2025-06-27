@@ -31,10 +31,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
     }
 
     @Override
-    public boolean deleteComment(String isbn, Long userId) {
-        return commentMapper.deleteByIsbnAndUserId(isbn, userId) > 0;
+    public boolean deleteComment(Long id) {  // [修改点] 参数改为id
+        return commentMapper.deleteById(id) > 0;
     }
-
     @Override
     public Double getAverageRating(String isbn) {
         return commentMapper.getAverageRatingByIsbn(isbn);

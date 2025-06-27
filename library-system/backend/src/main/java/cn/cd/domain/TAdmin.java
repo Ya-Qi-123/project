@@ -1,12 +1,19 @@
 package cn.cd.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("t_admin")
 public class TAdmin {
     private Long id;
+
+    @TableField(value = "adminname")
     private String adminname;
+
+    @TableField(value = "password")
     private String password;
+
+    @TableField(value = "email")
     private String email;
 
     public Long getId() { return id; }

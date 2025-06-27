@@ -37,7 +37,7 @@
         SELECT AVG(rating) FROM t_comment WHERE isbn = #{isbn}
     </select>
 
-    <delete id="deleteByIsbnAndUserId">
-        DELETE FROM t_comment WHERE isbn = #{isbn} AND user_id = #{userId}
+    <delete id="deleteById">
+        DELETE FROM t_comment WHERE id = #{id}
     </delete>
 </mapper>
