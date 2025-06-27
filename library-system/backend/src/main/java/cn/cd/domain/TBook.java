@@ -22,8 +22,6 @@ public class TBook {
     private String language;
     private String introduction;
 
-    @TableField(value = "cover_image")
-    private String cover_image;
 
     @TableField(value = "total_quantity")
     private int total_quantity;

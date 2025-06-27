@@ -7,6 +7,7 @@
     <groupId>cn.cd</groupId>
     <artifactId>backend</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <!-- 继承SpringBoot的启动项目，继承之后可以共享父项目和祖先项目的配置和各种信息：依赖版本，编译版本，插件，字符编码，配置文件等 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,6 +16,12 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -78,11 +85,28 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
         <!--添加Knife4j依赖-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
             <version>4.3.0</version>
         </dependency>
+
+        <!-- SLF4J 核心 API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version> <!-- 版本可根据需求升级，如 2.0.9 -->
+        </dependency>
+
+        <!-- 日志实现（以 Logback 为例，它内置支持 SLF4J） -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version> <!-- 版本可升级，如 1.4.11 -->
+        </dependency>
+
+
     </dependencies>
 </project>

@@ -22,7 +22,7 @@ public class BookController {
     private static final int MAX_DECIMAL_DIGITS = 2;
 
     @GetMapping("/pageQueryForAdmin")
-    public AjaxResult getBooksByPageForAdmin(
+    public AjaxResult pageQueryForAdmin(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
@@ -34,14 +34,13 @@ public class BookController {
     }
 
     @GetMapping("/pageQueryForUser")
-    public AjaxResult getBooksByPageForUser(
+    public AjaxResult pageQueryForUser(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String category) {
-
         Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
@@ -67,7 +66,7 @@ public class BookController {
     }
 
     @GetMapping("/list")
-    public AjaxResult getByBookList() {
+    public AjaxResult getAll() {
         List<TBook> books = bookService.HomePageService();
         return books != null && !books.isEmpty()
                 ? AjaxResult.ok(books)
@@ -76,7 +75,8 @@ public class BookController {
 
     // 修改图书的馆藏数量
     @PostMapping("/update/TotalQuantity")
-    public AjaxResult updateTotalQuantity(@RequestParam Long id, @RequestParam int changeNum) {
+    public AjaxResult updateTotalQuantity(@RequestParam String isbn, @RequestParam int changeNum) {
+        Long id = bookService.getByISBN(isbn).getId();
         if(changeNum > 0){
             bookService.updateBookAvailableQuantity(id, changeNum);
         }else if(changeNum < 0 && Math.abs(changeNum) < bookService.gatAvailableQuantityById(id)){
@@ -88,6 +88,7 @@ public class BookController {
         }
         return AjaxResult.me().setMessage("修改成功");
     }
+
     @PostMapping("/updateAll")
     public AjaxResult updateBook(@RequestBody TBook  book) {
         if (!isValidId(book.getId())) {
@@ -120,7 +121,7 @@ public class BookController {
     }
 
     @GetMapping("/getById")
-    public AjaxResult getByBookDetail(@RequestParam Long id) {
+    public AjaxResult getById(@RequestParam Long id) {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }
