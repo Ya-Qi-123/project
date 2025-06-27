@@ -21,28 +21,36 @@
         SET status = #{status}
         WHERE id = #{id}
     </update>
+
     <delete id="batchDeleteBooks" parameterType="java.util.List">
         DELETE FROM t_book
         WHERE id IN
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
+        AND status != 0
     </delete>
+
     <select id="getById" resultType="cn.cd.domain.TBook">
         select * from t_book where id= #{id}
     </select>
+
     <select id="getByName" resultType="cn.cd.domain.TBook">
         select * from t_book where name= #{name}
     </select>
+
     <select id="getByAuthor" resultType="cn.cd.domain.TBook">
         select * from t_book where author= #{author}
     </select>
+
     <select id="getByISBN" resultType="cn.cd.domain.TBook">
         select * from t_book where isbn= #{isbn}
     </select>
+
     <select id="getAll" resultType="cn.cd.domain.TBook">
         select * from t_book
     </select>
+
     <select id="selectPageForAdmin" resultType="cn.cd.domain.TBook">
         SELECT * FROM t_book
         <where>

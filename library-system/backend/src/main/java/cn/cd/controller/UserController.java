@@ -53,15 +53,15 @@ public class UserController {
     // 用户的注册
     @PostMapping("/register")
     public Object register(@RequestParam String username,
+                           @RequestParam String password,
                            @RequestParam String email,
-                           @RequestParam String phone,
-                           @RequestParam String password) {
-        TUser tUser1 = tUserService.loginServiceByEmailAndPassword(email, password);
-        TUser tUser2 = tUserService.loginServiceByPhoneAndPassword(phone, password);
+                           @RequestParam String phone) {
+        TUser tUser1 = tUserService.getByEmail(email);
+        TUser tUser2 = tUserService.getByPhone(phone);
         if (tUser1 != null || tUser2 != null) {
             return AjaxResult.fail("注册失败,邮箱或手机号已注册");
         }
-        int temp = tUserService.registerService(username, email, phone, password);
+        int temp = tUserService.registerService(username, password, email, phone);
         if (temp == 1) {
             return AjaxResult.ok("注册成功！");
         } else {
@@ -83,8 +83,8 @@ public class UserController {
 
     // 用户个人信息修改
     @PostMapping("/updatePersonalInformation")
-    public Object update(@RequestParam Long id, String username,
-                         String email, String phone, String gender) {
+    public Object update(@RequestParam Long id, @RequestParam String username,
+                         @RequestParam String email,@RequestParam String phone,String gender) {
         int temp = tUserService.updatePersonalInformation(id, username, email, phone, gender);
         if (temp == 1) {
             return AjaxResult.ok("修改成功！");
@@ -96,7 +96,8 @@ public class UserController {
     // 删除用户
     @DeleteMapping("/deleteById")
     public Object delete(@RequestParam Long id) {
-        if(lendService.getStatus(id) != 0){
+        Integer statusSum = lendService.getStatus(id);
+        if(statusSum != null && statusSum > 0){
             return AjaxResult.fail("该用户有未还的图书，请先还图书！");
         }
         int temp = tUserService.delete(id);
@@ -112,13 +113,17 @@ public class UserController {
     public Object updatePassword(@RequestParam Long id,
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword) {
-        TUser tUser = tUserService.getById(id);
-        if (tUser.getPassword().equals(oldPassword)) {
-            tUser.setPassword(newPassword);
-            tUserService.updateById(tUser);
-            return AjaxResult.ok("修改成功！");
-        } else {
-            return AjaxResult.fail("原密码错误！");
+        if(newPassword.equals(null) || newPassword.equals(oldPassword)){
+            return AjaxResult.fail("修改密码失败，新密码为空或与原密码相同。");
+        }else{
+            TUser tUser = tUserService.getById(id);
+            if (tUser.getPassword().equals(oldPassword)) {
+                tUser.setPassword(newPassword);
+                tUserService.updateById(tUser);
+                return AjaxResult.ok("修改密码成功！");
+            } else {
+                return AjaxResult.fail("修改失败，原密码错误！");
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ public class LendServiceImpl
 
     @Override
     public Integer getStatus(Long user_id) {
-        return lendrecordMapper.getStatus(user_id);
+        return lendrecordMapper.getStatusSum(user_id);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class LendServiceImpl
     public PageInfo<TLendrecord> pageQuery(LendQuery lendquery) {
         PageHelper.startPage(lendquery.getCurrentPage(),lendquery.getPageSize());
         List<TLendrecord> list =  lendrecordMapper.pageQuery(lendquery);
-        return new PageInfo<>(list);
+        return new PageInfo<>( list);
     }
 
     @Override
@@ -58,6 +58,26 @@ public class LendServiceImpl
     @Override
     public void updateRecordStatus(Long id, Integer status) {
         lendrecordMapper.updateRecordStatus(id, status);
+    }
+
+    @Override
+    public TLendrecord getById(Long id) {
+        return lendrecordMapper.getById(id);
+    }
+
+    @Override
+    public Long getBookidById(Long id) {
+        return lendrecordMapper.getBookidById(id);
+    }
+
+    @Override
+    public List<TLendrecord> getSoonRecord(Long userId) {
+        return lendrecordMapper.getSoonRecord(userId);
+    }
+
+    @Override
+    public List<TLendrecord> getOverTimeRecord(Long userId) {
+        return lendrecordMapper.getOverTimeRecord(userId);
     }
 
 

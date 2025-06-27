@@ -20,11 +20,13 @@
         VALUES (#{user_id}, #{book_id}, #{category}, NOW(),
                 DATE_ADD(NOW(), INTERVAL 30 DAY), #{bookname}, 1)
     </insert>
+
     <update id="updateRecordStatus">
         UPDATE t_lendrecord
         SET status = #{status}
         WHERE id = #{id}
     </update>
+
     <delete id="deleteRecord">
         DELETE FROM t_lendrecord WHERE id = #{id}
     </delete>
@@ -33,38 +35,71 @@
         select count(*) as categoryLendNum, category
         from t_lendrecord group by category
     </select>
+
     <select id="countByName" resultMap = "LendrecordMap">
         select count(*) as booknameLendNum, bookname, category
         from t_lendrecord group by bookname, category
+        order by booknameLendNum desc
+        limit 10
     </select>
+
     <select id="countByUserid" resultMap = "LendrecordMap">
         select count(*) as userRentNum, user_id
         from t_lendrecord group by user_id
+        order by userRentNum desc
+        limit 10
     </select>
 
-    <select id="getStatus" resultType="Integer">
-        select sum(status) from t_lendrecord
+    <select id="getStatusSum" resultType="Integer">
+        select sum(status) as statusSum from t_lendrecord
         where user_id = #{user_id}
     </select>
 
-    <select id="pageQuery" resultType="cn.cd.domain.TLendrecord">
+    <select id="pageQuery" resultMap = "LendrecordMap">
         select * from t_lendrecord
-        where
-        <if test="user_id != null and user_id != ''">
-            user_id = #{user_id}
-        </if>
-        <if test="book_id != null and book_id != ''">
-            and book_id = #{book_id}
-        </if>
-        <if test="bookname != null and bookname != ''">
-            and bookname like concat('%',#{bookname},'%')
-        </if>
-        <if test="category != null and category != ''">
-            and category like concat('%',#{category},'%')
-        </if>
-        <if test="status != null">
-            and status = #{status}
-        </if>
+        <where>
+            <if test="user_id != null and user_id != ''">
+                user_id = #{user_id}
+            </if>
+            <if test="book_id != null and book_id != ''">
+                AND book_id = #{book_id}
+            </if>
+            <if test="bookname != null and bookname != ''">
+                AND bookname LIKE CONCAT('%', #{bookname}, '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND category LIKE CONCAT('%', #{category}, '%')
+            </if>
+            <choose>
+                <when test="status != null">
+                    AND status = #{status}
+                </when>
+                <otherwise>
+                    AND status IN (0, 1)
+                </otherwise>
+            </choose>
+        </where>
     </select>
+
+    <select id="getById" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord where id = #{id}
+    </select>
+
+    <select id="getBookidById" resultType="java.lang.Long">
+        select book_id from t_lendrecord where id = #{id}
+    </select>
+
+    <!-- 获取已经超时的借阅记录 -->
+    <select id="getOverTimeRecord" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord
+        where user_id = #{userId} and status = 1 and NOW() > return_time
+    </select>
+
+    <!-- 获取即将到期的借阅记录 -->
+    <select id="getSoonRecord" resultType="cn.cd.domain.TLendrecord">
+        select * from t_lendrecord
+        where user_id = #{userId} and status = 1 and DATE_SUB(NOW(), INTERVAL 5 DAY) > return_time
+    </select>
+
 
 </mapper>

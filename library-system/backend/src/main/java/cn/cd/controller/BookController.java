@@ -77,6 +77,10 @@ public class BookController {
         if (!isValidId(book.getId())) {
             return AjaxResult.fail("图书ID格式错误");
         }
+        // 2. 检查图书是否存在
+        if (bookService.getById(book.getId()) == null) {
+            return AjaxResult.fail("图书ID不存在，无法更新");
+        }
         String errorMsg = validateBookFields(book.getIsbn(), book.getName(),
                 book.getPrice(), book.getAuthor(),
                 book.getPublisher(), book.getCategory());
@@ -109,6 +113,7 @@ public class BookController {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }
+
         TBook book = bookService.getBookById(id);
         return book != null
                 ? AjaxResult.ok(book)
@@ -135,8 +140,8 @@ public class BookController {
     }
 
     private String validatePrice(BigDecimal price) {
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
-            return "价格不能为负数";
+        if (price.compareTo(BigDecimal.ZERO) <= 0) {
+            return "价格格式错误";
         }
         //价格的整数部分和小数部分长度不能超过8位和2位
         int integerDigits = price.precision() - price.scale();

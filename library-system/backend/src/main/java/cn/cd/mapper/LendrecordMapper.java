@@ -3,8 +3,10 @@ package cn.cd.mapper;
 import cn.cd.domain.TLendrecord;
 import cn.cd.query.LendQuery;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.pagehelper.PageInfo;
 
 
+import java.time.Instant;
 import java.util.List;
 
 public interface LendrecordMapper
@@ -22,7 +24,12 @@ public interface LendrecordMapper
     // 查看当前用户的所有记录
     List<TLendrecord> pageQuery(LendQuery lendquery);
 
+    TLendrecord getById( Long id);
 
-    Integer getStatus(Long user_id);
+    Integer getStatusSum(Long user_id);
 
+    Long getBookidById(Long id);
+
+    List<TLendrecord> getOverTimeRecord(Long userId);
+    List<TLendrecord> getSoonRecord(Long userId);
 }
