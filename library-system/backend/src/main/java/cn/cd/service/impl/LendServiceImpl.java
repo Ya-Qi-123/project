@@ -4,20 +4,21 @@ import cn.cd.domain.TLendrecord;
 import cn.cd.mapper.LendrecordMapper;
 import cn.cd.query.LendQuery;
 import cn.cd.service.LendService;
-import cn.cd.util.AjaxResult;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LendServiceImpl
         extends ServiceImpl<LendrecordMapper, TLendrecord>
         implements LendService {
-    @Autowired
+    @Resource
     private LendrecordMapper lendrecordMapper;
 
 
@@ -27,17 +28,20 @@ public class LendServiceImpl
     }
 
     @Override
-    public List<TLendrecord> countByCategory() {
-        return lendrecordMapper.countByCategory();
+    public List<Map<String, Object>> countByCategory() {
+        return this.baseMapper.countByCategory();
     }
+
     @Override
-    public List<TLendrecord> countByName() {
-        return lendrecordMapper.countByName();
+    public List<Map<String, Object>> countByBookName() {
+        return this.baseMapper.countByBookName();
     }
+
     @Override
-    public List<TLendrecord> countByUserid() {
-        return lendrecordMapper.countByUserid();
+    public List<Map<String, Object>> countByUserIdTop10() {
+        return this.baseMapper.countByUserIdTop10();
     }
+
 
     @Override
     public void addRecord(Long book_id, Long user_id, String category, String bookname) {
@@ -45,10 +49,15 @@ public class LendServiceImpl
     }
 
     @Override
-    public PageInfo<TLendrecord> pageQuery(LendQuery lendquery) {
-        PageHelper.startPage(lendquery.getCurrentPage(),lendquery.getPageSize());
-        List<TLendrecord> list =  lendrecordMapper.pageQuery(lendquery);
-        return new PageInfo<>( list);
+    public Page<TLendrecord> pageQuery(LendQuery lendquery) {
+        QueryWrapper<TLendrecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(lendquery.getUser_id() != null,"user_id", lendquery.getUser_id())
+                .like(StringUtils.isNotBlank(lendquery.getBookname()),"bookname", lendquery.getBookname())
+                .like(StringUtils.isNotBlank(lendquery.getCategory()),"category", lendquery.getCategory())
+                .eq(lendquery.getStatus() != null,"status", lendquery.getStatus());
+        Page<TLendrecord> page = new Page<>(lendquery.getCurrentPage(), lendquery.getPageSize());
+        lendrecordMapper.selectCount(queryWrapper);
+        return lendrecordMapper.selectPage(page, queryWrapper);
     }
 
     @Override

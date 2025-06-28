@@ -1,7 +1,11 @@
 server:
-  port: 8080 # 端口浩
+  port: 8080
   servlet:
-    context-path: / # 上下文路径
+    session:
+      cookie:
+        name: SESSION
+        same-site: None
+        secure: true
 
 # 连接数据库的四大金刚
 spring:
@@ -10,30 +14,26 @@ spring:
     password: 123456
     url: jdbc:mysql://localhost:3306/library-system-new?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    host: localhost
-    port: 6379
-    password:
-    jedis:
-      pool:
-        max-active: 8  # 连接池支持的最大连接数
-        max-wait: -1   # 最大建立连接等待时间（-1 表示永不超时）
-        max-idle: 500  # 连接池中最多可空闲的连接数
-        min-idle: 0    # 连接池中最少可空闲的连接数
-    lettuce:
-      shutdown-timeout: 0  # Lettuce 客户端关闭超时时间（默认 100ms，这里设为 0）
-
-# mybatis配置
-mybatis:
-  type-aliases-package: cn.cd.domain
-  mapper-locations: classpath:mapper/*Mapper.xml
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 4
+          min-idle: 2
+          max-wait: 2000ms
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
 
 # 查看sql日志
 logging:
   level:
     cn.cd: trace
-
-# 导入mybatiplus的依赖
-mybatis-plus:
-  type-aliases-package: cn.cd.domain
-  mapper-locations: classpath:mapper/*Mapper.xml
+## 导入mybatiplus的依赖
+#mybatis-plus:
+#  type-aliases-package: cn.cd.domain
+#  mapper-locations: classpath:mapper/*Mapper.xml

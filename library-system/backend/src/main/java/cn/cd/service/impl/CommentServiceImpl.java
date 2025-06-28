@@ -5,12 +5,12 @@ import cn.cd.mapper.CommentMapper;
 import cn.cd.service.CommentService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> implements CommentService {
-    @Autowired
+    @Resource
     private CommentMapper commentMapper;
 
     @Override

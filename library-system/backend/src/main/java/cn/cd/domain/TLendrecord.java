@@ -32,9 +32,6 @@ public class TLendrecord {
     private Integer status; // 0已还,1未还
 
 
-    private int categoryLendNum; //每个类的图书被借阅次数
-    private int booknameLendNum; // 每种图书被借阅次数
-    private int userRentNum; // 每个用户借书次数
     private  int statusSum;
 
     public String getReturn_time(){

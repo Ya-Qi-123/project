@@ -6,8 +6,8 @@ import cn.cd.service.BookService;
 import cn.cd.service.LendService;
 import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
-import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,32 +15,31 @@ import java.util.List;
 @RequestMapping("/lend")
 public class LendrecordController
 {
-    @Autowired
+    @Resource
     private LendService lendService;
-    @Autowired
+    @Resource
     private BookService bookService;
-    @Autowired
+    @Resource
     private UserService userService;
+
 
     // 分类别计数
     @GetMapping("/countByCategory")
     public Object countByCategory(){
-        List<TLendrecord> countByCategory = lendService.countByCategory();
-        return countByCategory;
+        // 1. 查询所有分类的借阅次数
+        return lendService.countByCategory();
     }
 
     // 分书计数
-    @GetMapping("/countByName")
-    public Object countByName(){
-        List<TLendrecord> countByName = lendService.countByName();
-        return countByName;
+    @GetMapping("/countByBookName")
+    public Object countByBookName(){
+        return lendService.countByBookName();
     }
 
     // 统计每个用户的借阅次数
-    @GetMapping("/countByUserid")
-    public Object countByUserid(){
-        List<TLendrecord> countByUserid = lendService.countByUserid();
-        return countByUserid;
+    @GetMapping("/countByUseridTop10")
+    public Object countByUseridTop10(){
+        return lendService.countByUserIdTop10();
     }
 
     // 增加借阅记录
@@ -56,11 +55,28 @@ public class LendrecordController
         return AjaxResult.me().setMessage("添加成功");
     }
 
+    //    // 可以对借阅记录表进行查询，分页查询+高级查询
+//    @PostMapping("/pageQuery")
+//    public Page<TLendrecord> pageQuery(@RequestBody LendQuery lendquery, HttpServletRequest request){
+//        TUser currentUser = userService.getCurrentUser(request);
+//        if (!Objects.equals(currentUser.getId(), lendquery.getUser_id())) {
+//            throw new BusinessException("用户权限不足");
+//        }
+//        QueryWrapper<TLendrecord> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("user_id", lendquery.getUser_id());
+//        Page<TLendrecord> page = new Page<>(lendquery.getCurrentPage(), lendquery.getPageSize());
+//
+////        Page<TLendrecord> list =lendService.pageQuery(lendquery);
+//        return lendService.page(page, queryWrapper);
+//    }
+
     // 可以对借阅记录表进行查询，分页查询+高级查询
     @PostMapping("/pageQuery")
-    public PageInfo<TLendrecord> pageQuery(@RequestBody LendQuery lendquery){
-        PageInfo<TLendrecord> list =lendService.pageQuery(lendquery);
-        return list;
+    public Page<TLendrecord> pageQuery(@RequestBody LendQuery lendquery){
+        if(lendquery == null){
+            return Page.of(1, 5);
+        }
+        return lendService.pageQuery(lendquery);
     }
 
     // 删除借阅记录

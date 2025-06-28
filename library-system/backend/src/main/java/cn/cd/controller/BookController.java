@@ -3,9 +3,10 @@ package cn.cd.controller;
 import cn.cd.domain.TBook;
 import cn.cd.service.BookService;
 import cn.cd.util.AjaxResult;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-    @Autowired
+    @Resource
     private BookService bookService;
 
     private static final int MAX_INTEGER_DIGITS = 8;
@@ -27,9 +28,10 @@ public class BookController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String author,
-            @RequestParam(required = false) String isbn) {
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) String category) {
 
-        Page<TBook> page = bookService.getBooksByPageForAdmin(currentPage, size, name, author, isbn);
+        Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
 
@@ -41,6 +43,7 @@ public class BookController {
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String category) {
+
         Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
@@ -56,11 +59,19 @@ public class BookController {
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-        if(bookService.getByISBN(isbn) != null){
+        QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("isbn", isbn);
+        if(bookService.getOne(queryWrapper) != null){
             return AjaxResult.fail("添加失败！该图书已存在");
         }
-        bookService.addBook(isbn, name, price, author, publisher, category,
-                language, introduction, total_quantity);
+        TBook book = new TBook();
+        book.setIsbn(isbn);
+        book.setName(name);
+        book.setPrice(price);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
+        book.setCategory(category);
+        bookService.save(book);
         return AjaxResult.me().setMessage("添加成功");
 
     }

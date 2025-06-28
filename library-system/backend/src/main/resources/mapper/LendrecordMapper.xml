@@ -31,24 +31,6 @@
         DELETE FROM t_lendrecord WHERE id = #{id}
     </delete>
 
-    <select id="countByCategory" resultMap = "LendrecordMap">
-        select count(*) as categoryLendNum, category
-        from t_lendrecord group by category
-    </select>
-
-    <select id="countByName" resultMap = "LendrecordMap">
-        select count(*) as booknameLendNum, bookname, category
-        from t_lendrecord group by bookname, category
-        order by booknameLendNum desc
-        limit 10
-    </select>
-
-    <select id="countByUserid" resultMap = "LendrecordMap">
-        select count(*) as userRentNum, user_id
-        from t_lendrecord group by user_id
-        order by userRentNum desc
-        limit 10
-    </select>
 
     <select id="getStatusSum" resultType="Integer">
         select sum(status) as statusSum from t_lendrecord
