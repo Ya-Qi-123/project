@@ -28,13 +28,13 @@ public class UserServiceImpl
     // TUserServiceImpl 中新增的邮箱登录方法
     @Override
     public TUser loginServiceByEmailAndPassword(String email, String password) {
-        TUser tUser = tUserMapper.getByEmailAndPassword(email, password); // Mapper 层查询邮箱+密码匹配的用户
+        TUser tUser = tUserMapper.getByEmailAndPassword(email, password);
         return tUser;
     }
 
     @Override
     public TUser loginServiceByPhoneAndPassword(String phone, String password) {
-        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password); // Mapper 层查询邮箱+密码匹配的用户
+        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password);
         return tUser;
     }
 

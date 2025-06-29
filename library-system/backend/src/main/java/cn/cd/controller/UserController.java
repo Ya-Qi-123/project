@@ -27,10 +27,12 @@ public class UserController {
     @Resource
     private RedisUtil redisUtils;
 
+
+
     // 用户的邮箱密码登录
     @PostMapping("/login/EmailAndPassword")
     @Parameters({
-            @Parameter(name = "email", description = "用户邮箱", required = true),
+            @Parameter(name = "email",    description = "用户邮箱", required = true),
             @Parameter(name = "password", description = "用户密码", required = true)
     })
     public Object loginByEmailAndPassword(@RequestParam String email,
@@ -53,18 +55,26 @@ public class UserController {
 
     // 用户的手机号密码登录
     @PostMapping("/login/PhoneAndPassword")
+    @Parameters({
+            @Parameter(name = "phone",    description = "用户手机号", required = true),
+            @Parameter(name = "password", description = "用户密码",  required = true)
+    })
     public Object loginByPhoneAndPassword(@RequestParam String phone,
-                                          @RequestParam String password) {
+                                          @RequestParam String password,
+                                          HttpServletRequest request) {
         TUser tUser = tUserService.loginServiceByPhoneAndPassword(phone, password);
         if (tUser == null) {
             return AjaxResult.fail("登录失败，手机号或密码错误。");
+        } else {
+            if (tUser.getStatus() == 1) {
+                // TODO:登录成功，将用户信息存入Session
+                String sessionId = request.getSession().getId();
+                redisUtils.set(sessionId, JSON.toJSONString(tUser), 3600, TimeUnit.SECONDS);
+                return tUser;
+            } else {
+                return AjaxResult.fail("登录失败,该账号无法使用");
+            }
         }
-        if (tUser.getStatus() == 1) {
-            return tUser;
-        } else if (tUser.getStatus() != 1) {
-            return AjaxResult.fail("登录失败,该账号无法使用");
-        }
-        return null;
     }
 
     // 用户的注册
