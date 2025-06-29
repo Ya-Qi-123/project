@@ -134,7 +134,7 @@ public class UserController {
         if(statusSum != null && statusSum > 0){
             return AjaxResult.fail("该用户有未还的图书，请先还图书！");
         }
-        if (tUserService.delete(id) == 1) {
+        if (tUserService.removeById(id)) {
             return AjaxResult.ok("删除成功！");
         } else {
             return AjaxResult.fail("删除失败！");

@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 @Data
 @TableName(value = "t_book")
 public class TBook {
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String isbn;

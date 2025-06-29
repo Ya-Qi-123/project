@@ -13,38 +13,38 @@
         <result property="category" column="category"/>
         <result property="language" column="language"/>
         <result property="introduction" column="introduction"/>
-        <result property="total_quantity" column="total_quantity"/>
-        <result property="available_quantity" column="available_quantity"/>
+        <result property="totalQuantity" column="total_quantity"/>
+        <result property="availableQuantity" column="available_quantity"/>
     </resultMap>
 
     <!-- 添加图书时，默认将在库数量设置为馆藏数量 -->
     <insert id="add">
         INSERT INTO t_book
             (isbn, name, price, author, publisher,category,language,
-             introduction, total_quantity, available_quantity)
+             introduction, totalQuantity, availableQuantity)
         VALUES ( #{isbn}, #{name}, #{price}, #{author}, #{publisher}, #{category},#{language},
-                #{introduction}, #{total_quantity}, #{total_quantity})
+                #{introduction}, #{totalQuantity}, #{totalQuantity})
     </insert>
 
     <update id="update">
         UPDATE t_book
         SET isbn = #{isbn}, name = #{name}, price = #{price}, author = #{author},
             publisher = #{publisher}, category = #{category}, language = #{language},
-            introduction = #{introduction}, cover_image = #{cover_image},
-            total_quantity = #{total_quantity}, available_quantity = #{available_quantity}
+            introduction = #{introduction},
+            totalQuantity = #{totalQuantity}, availableQuantity = #{availableQuantity}
         WHERE id = #{id}
     </update>
 
     <!-- 更新图书在库数量，如果借书，将quantity设置为负数 -->
     <update id="updateBookAvailableQuantity">
         UPDATE t_book
-        SET available_quantity = available_quantity + #{changeNum}
+        SET availableQuantity = availableQuantity + #{changeNum}
         WHERE id = #{id}
     </update>
     <update id="updateTotalAndAvailable">
         UPDATE t_book
-        SET total_quantity = total_quantity + #{changeNum},
-            available_quantity = available_quantity + #{changeNum}
+        SET totalQuantity = totalQuantity + #{changeNum},
+            availableQuantity = availableQuantity + #{changeNum}
         WHERE id = #{id}
     </update>
 
@@ -110,10 +110,10 @@
     </select>
 
     <select id="gatAvailableQuantityById" resultType="java.lang.Integer">
-        SELECT available_quantity FROM t_book WHERE id = #{id}
+        SELECT availableQuantity FROM t_book WHERE id = #{id}
     </select>
 
     <select id="gatTotalQuantityById" resultType="java.lang.Integer">
-        select total_quantity from t_book where id = #{id}
+        select totalQuantity from t_book where id = #{id}
     </select>
 </mapper>

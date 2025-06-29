@@ -31,7 +31,7 @@ public class BookController {
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String category) {
 
-        Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
+        Page<TBook> page = bookService.getBooksByPage(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
 
@@ -44,7 +44,7 @@ public class BookController {
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) String category) {
 
-        Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
+        Page<TBook> page = bookService.getBooksByPage(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
 
@@ -139,7 +139,7 @@ public class BookController {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }
-        TBook book = bookService.getBookById(id);
+        TBook book = bookService.getById(id);
         return book != null
                 ? AjaxResult.ok(book)
                 : AjaxResult.fail("图书不存在");

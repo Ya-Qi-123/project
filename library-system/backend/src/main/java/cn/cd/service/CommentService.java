@@ -12,4 +12,6 @@ public interface CommentService extends IService<TComment> {
     boolean deleteComment(String isbn, Long userId);
 
     Double getAverageRating(String isbn);
+
+    Page<TComment> pageQuery(String isbn, Long userId, Integer page, Integer size);
 }

@@ -101,7 +101,7 @@ public class LendrecordController
     // 删除借阅记录
     @DeleteMapping("/deleteRecord")
     public Object deleteRecord(@RequestParam Long id){
-        lendService.deleteRecord(id);
+        lendService.removeById(id);
         return AjaxResult.me().setMessage("删除成功");
     }
 
@@ -113,7 +113,7 @@ public class LendrecordController
             return AjaxResult.fail("该借阅记录不存在！");
         }
         lendService.updateRecordStatus(id, status);
-        Long book_id = lendService.getBookidById(id);
+        Long book_id = lendService.getById(id).getBookId();
         bookService.updateBookAvailableQuantity(book_id, 1);
         return AjaxResult.me().setMessage("修改成功");
     }

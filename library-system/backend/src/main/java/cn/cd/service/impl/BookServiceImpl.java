@@ -3,9 +3,12 @@ package cn.cd.service.impl;
 import cn.cd.domain.TBook;
 import cn.cd.mapper.BookMapper;
 import cn.cd.service.BookService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,79 +20,92 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements B
     @Resource
     private BookMapper bookMapper;
 
+//    @Override
+//    public Page<TBook> getBooksByPageForAdmin(
+//            int current, int size,
+//            String name, String author, String isbn) {
+//        Page<TBook> page = new Page<>(current, size);
+//        return bookMapper.selectPageForAdmin(page, name, author, isbn);
+//    }
+
+    // 获取所有图书，实现分页查询、高级查询
     @Override
-    public Page<TBook> getBooksByPageForAdmin(
+    public Page<TBook> getBooksByPage(
             int current, int size,
-            String name, String author, String isbn) {
+            String name, String author, String isbn, String category) {
+        QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isBlank(name), "name", name);
+        queryWrapper.like(StringUtils.isBlank(author), "author", author);
+        queryWrapper.eq(StringUtils.isBlank(isbn), "isbn", isbn);
+        queryWrapper.like(StringUtils.isBlank(category), "category", category);
         Page<TBook> page = new Page<>(current, size);
-        return bookMapper.selectPageForAdmin(page, name, author, isbn);
+        return bookMapper.selectPage(page, queryWrapper);
     }
 
-    @Override
-    public Page<TBook> getBooksByPageForUser(int current, int size, String name,
-                                             String author, String isbn, String category) {
-        Page<TBook> page = new Page<>(current, size);
-        return bookMapper.selectPageForUser(page, name, author, isbn, category);
-    }
+//    @Override
+//    public Page<TBook> getBooksByPageForUser(int current, int size, String name,
+//                                             String author, String isbn, String category) {
+//        Page<TBook> page = new Page<>(current, size);
+//        return bookMapper.selectPageForUser(page, name, author, isbn, category);
+//    }
 
-
-    @Override
-    public TBook getById(Long id) {
-        return bookMapper.getById(id);
-    }
 
     @Override
     public void updateBookAvailableQuantity(Long id, int quantity) {
-        bookMapper.updateBookAvailableQuantity(id, quantity);
+        UpdateWrapper<TBook> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id)
+                .setSql("available_quantity = available_quantity + " + quantity);
+        bookMapper.update(updateWrapper);
     }
 
     @Override
     public int gatAvailableQuantityById(Long id) {
-        return bookMapper.gatAvailableQuantityById(id);
+        return bookMapper.selectById(id).getAvailableQuantity();
+
+//        return bookMapper.gatAvailableQuantityById(id);
     }
 
     @Override
     public int gatTotalQuantityById(Long id) {
-        return bookMapper.gatTotalQuantityById(id);
+        return bookMapper.selectById(id).getTotalQuantity();
     }
 
 
     @Override
     public List<TBook> HomePageService() {
-        return bookMapper.getAll();
+        return bookMapper.selectList(null);
     }
 
-    @Override
-    public int addBook(String isbn, String name, BigDecimal price,
-                       String author, String publisher,String category,
-                       String language, String introduction, int total_quantity) {
-        return bookMapper.add(isbn, name, price, author, publisher, category,
-                language, introduction, total_quantity);
-    }
 
     @Override
-    public int updateBook(TBook book) {
-        return bookMapper.update(book);
-    }
-
-    @Override
-    public TBook getBookById(Long id) {
-        return bookMapper.getById(id);
+    public void updateBook(TBook book) {
+        bookMapper.update(book);
     }
 
     @Override
     public TBook getByISBN(String isbn) {
-        return bookMapper.getByISBN(isbn);
+        QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("isbn", isbn);
+        return bookMapper.selectOne(queryWrapper);
+
+//        return bookMapper.getByISBN(isbn);
     }
 
     @Override
     public int batchDeleteBooks(List<Long> ids ) {
-        return bookMapper.batchDeleteBooks(ids);
+        return bookMapper.deleteByIds(ids);
+//        return bookMapper.batchDeleteBooks(ids);
     }
 
     @Override
     public void updateTotalAndAvailable(Long id, int changeNum) {
-        bookMapper.updateTotalAndAvailable(id, changeNum);
+        UpdateWrapper<TBook> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id);
+        updateWrapper.setSql("total_quantity = total_quantity + " + changeNum);
+        updateWrapper.setSql("available_quantity = available_quantity + " + changeNum);
+        bookMapper.update(updateWrapper);
+
+//        bookMapper.updateTotalAndAvailable(id, changeNum);
     }
 
 }

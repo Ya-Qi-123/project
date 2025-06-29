@@ -5,6 +5,7 @@ import cn.cd.query.UserQuery;
 import cn.cd.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TUser;
@@ -32,52 +33,75 @@ public class UserServiceImpl
     // TUserServiceImpl 中新增的邮箱登录方法
     @Override
     public TUser loginServiceByEmailAndPassword(String email, String password) {
-        TUser tUser = tUserMapper.getByEmailAndPassword(email, password);
-        return tUser;
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", email).eq("password", password);
+        return tUserMapper.selectOne(queryWrapper);
+
+//        TUser tUser = tUserMapper.getByEmailAndPassword(email, password);
+//        return tUser;
     }
 
     @Override
     public TUser loginServiceByPhoneAndPassword(String phone, String password) {
-        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password);
-        return tUser;
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone).eq("password", password);
+        return tUserMapper.selectOne(queryWrapper);
+
+//        TUser tUser = tUserMapper.getByPhoneAndPassword(phone, password);
+//        return tUser;
     }
 
     @Override
     public int registerService(String username, String password,
                                  String email, String phone) {
-        return tUserMapper.register(username, password, email, phone);
+        TUser tUser = new TUser();
+        tUser.setUsername(username);
+        tUser.setPassword(password);
+        tUser.setEmail(email);
+        tUser.setPhone(phone);
+        return tUserMapper.insert(tUser);
+//        return tUserMapper.register(username, password, email, phone);
     }
 
     @Override
     public int updateStatus(Long id, Integer status) {
-        return tUserMapper.updateStatus(id, status);
-    }
-
-    @Override
-    public int delete(Long id) {
-        return tUserMapper.deleteById(id);
+        UpdateWrapper<TUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id);
+        return tUserMapper.update(updateWrapper.set("status", status));
+//        return tUserMapper.updateStatus(id, status);
     }
 
     @Override
     public int updatePersonalInformation(Long id, String username, String email,
                                          String phone, String gender) {
-        return tUserMapper.updatePersonalInformation(id, username, email, phone, gender);
+        UpdateWrapper<TUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", id);
+        updateWrapper.set("username", username);
+        updateWrapper.set("email", email);
+        updateWrapper.set("phone", phone);
+        updateWrapper.set("gender", gender);
+        return tUserMapper.update(updateWrapper);
+
+//        return tUserMapper.updatePersonalInformation(id, username, email, phone, gender);
     }
 
     @Override
     public TUser getByEmail(String email) {
-        return tUserMapper.getByEmail(email);
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", email);
+        return tUserMapper.selectOne(queryWrapper);
+//        return tUserMapper.getByEmail(email);
     }
 
     @Override
     public TUser getByPhone(String phone) {
-        return tUserMapper.getByPhone(phone);
+        QueryWrapper<TUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        return tUserMapper.selectOne(queryWrapper);
+//        return tUserMapper.getByPhone(phone);
     }
 
-    @Override
-    public TUser getByUsername(String username) {
-        return tUserMapper.getByUsername(username);
-    }
+
 
     /**
      * @param request 请求

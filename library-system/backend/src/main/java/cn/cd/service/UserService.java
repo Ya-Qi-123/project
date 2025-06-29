@@ -15,15 +15,12 @@ public interface UserService extends IService<TUser> {
     int registerService(String username, String password, String email, String phone);
     int updateStatus(Long id, Integer status);
 
-    int delete(Long id);
 
     int updatePersonalInformation(Long id, String username, String email, String phone, String gender);
 
     TUser getByEmail(String email);
 
     TUser getByPhone(String phone);
-
-    TUser getByUsername(String username);
 
     TUser getCurrentUser(HttpServletRequest request);
 

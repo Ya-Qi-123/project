@@ -23,28 +23,30 @@ public class FavorController {
     private RedisUtil redisUtil;
 
     @PostMapping("/add")
-    public AjaxResult addFavorite(@RequestBody TFavor favor, HttpServletRequest request) {
+    public AjaxResult addFavorite(@RequestParam String isbn,
+                                  @RequestParam Long userId,
+                                  HttpServletRequest request) {
         TUser currentUser = userService.getCurrentUser(request);
-        if(!currentUser.getId().equals(favor.getUserId())){
+        if(!currentUser.getId().equals(userId)){
             throw new RuntimeException("用户权限不足");
         }
-        boolean success = favorService.addFavorite(favor);
+        boolean success = favorService.addFavorite(isbn, userId);
         return success ? AjaxResult.ok("收藏成功") : AjaxResult.fail("收藏失败或已收藏");
     }
 
-    @DeleteMapping("/remove/{id}")
-    public AjaxResult removeFavorite(@PathVariable Long id, HttpServletRequest request) {
+    @DeleteMapping("/removeById")
+    public AjaxResult removeFavorite(@RequestParam Long id, HttpServletRequest request) {
         TUser currentUser = userService.getCurrentUser(request);
         if(!currentUser.getId().equals( favorService.getById(id).getUserId())){
             throw new RuntimeException("用户权限不足");
         }
-        boolean success = favorService.removeFavorite(id);
+        boolean success = favorService.removeById(id);
         return success ? AjaxResult.ok("取消收藏成功") : AjaxResult.fail("取消收藏失败");
     }
 
-    @GetMapping("/getById/{userId}")
+    @GetMapping("/getByUserId")
     public AjaxResult getFavoritesByUserId(
-            @PathVariable Long userId,
+            @RequestParam Long userId,
             @RequestParam(defaultValue = "1") Integer page) {
         Page<TFavor> favorites = favorService.getFavoritesByUserId(userId, page);
         return AjaxResult.ok(favorites);

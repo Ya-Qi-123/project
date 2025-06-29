@@ -13,23 +13,33 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
-    @GetMapping("/isbn/{isbn}")
+    @GetMapping("/getCommentsByIsbn")
     public AjaxResult getCommentsByIsbn(
-            @PathVariable String isbn,
+            @RequestParam String isbn,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         Page<TComment> comments = commentService.getCommentsByIsbn(isbn, page, size);
         return AjaxResult.ok(comments);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/getCommentsByUserId")
     public AjaxResult getCommentsByUserId(
-            @PathVariable Long userId,
+            @RequestParam Long userId,
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         Page<TComment> comments = commentService.getCommentsByUserId(userId, page, size);
         return AjaxResult.ok(comments);
     }
+
+    @GetMapping("/pageQuery")
+    public Page<TComment> pageQuery(
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return commentService.pageQuery(isbn, userId, page, size);
+    }
+
 
     @PostMapping("/addComment")
     public AjaxResult addComment(@RequestBody TComment comment) {
@@ -38,17 +48,15 @@ public class CommentController {
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }
 
-    @DeleteMapping
-    public AjaxResult deleteComment(
-            @RequestParam String isbn,
-            @RequestParam Long userId) {
-        boolean success = commentService.deleteComment(isbn, userId);
+    @DeleteMapping("/deleteCommentById")
+    public AjaxResult deleteComment(@RequestParam Long id) {
+        boolean success = commentService.removeById(id);
         return success ? AjaxResult.ok("评论删除成功") : AjaxResult.fail("评论删除失败");
     }
 
     // 获取图书平均评分
-    @GetMapping("/rating/{isbn}")
-    public AjaxResult getAverageRating(@PathVariable String isbn) {
+    @GetMapping("/getAverageRating")
+    public AjaxResult getAverageRating(@RequestParam String isbn) {
         Double rating = commentService.getAverageRating(isbn);
         return AjaxResult.ok(rating != null ? rating : 0);
     }

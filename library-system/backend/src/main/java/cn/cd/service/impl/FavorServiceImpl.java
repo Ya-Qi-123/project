@@ -1,27 +1,52 @@
 package cn.cd.service.impl;
 
+import cn.cd.domain.TBook;
 import cn.cd.domain.TFavor;
+import cn.cd.mapper.BookMapper;
 import cn.cd.mapper.FavorMapper;
 import cn.cd.service.FavorService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import jakarta.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class FavorServiceImpl extends ServiceImpl<FavorMapper, TFavor> implements FavorService {
 
+    @Resource
+    private FavorMapper favorMapper;
+    @Resource
+    private BookMapper bookMapper;
+
     @Override
-    public boolean addFavorite(TFavor favor) {
-        // 检查是否已收藏
-        if (lambdaQuery()
-                .eq(TFavor::getUserId, favor.getUserId())
-                .eq(TFavor::getIsbn, favor.getIsbn())
-                .count() > 0) {
-            return false;
+    public boolean addFavorite(String isbn, Long userId) {
+        // 查询是否已收藏
+        QueryWrapper<TFavor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("isbn", isbn);
+        if (!favorMapper.exists(queryWrapper)) {
+            throw new RuntimeException("已收藏");
         }
-        return save(favor);
+
+        // 插入数据
+        TBook book = bookMapper.getByISBN(isbn);
+        TFavor favor = new TFavor();
+        favor.setIsbn(isbn);
+        favor.setUserId(userId);
+        favor.setBookName(book.getName());
+        favor.setAuthor(book.getAuthor());
+        return favorMapper.insert(favor) > 0;
+
+//        // 检查是否已收藏
+//        if (lambdaQuery()
+//                .eq(TFavor::getUserId, favor.getUserId())
+//                .eq(TFavor::getIsbn, favor.getIsbn())
+//                .count() > 0) {
+//            return false;
+//        }
+//        return save(favor);
     }
 
     @Override
@@ -33,11 +58,17 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, TFavor> implement
         }
         return removeById(id);
     }
+
     @Override
     public Page<TFavor> getFavoritesByUserId(Long userId, Integer page) {
+        QueryWrapper<TFavor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
         Page<TFavor> pageInfo = new Page<>(page, 10);
-        return lambdaQuery()
-                .eq(TFavor::getUserId, userId)
-                .page(pageInfo);
+        return favorMapper.selectPage(pageInfo, queryWrapper);
+
+//        Page<TFavor> pageInfo = new Page<>(page, 10);
+//        return lambdaQuery()
+//                .eq(TFavor::getUserId, userId)
+//                .page(pageInfo);
     }
 }

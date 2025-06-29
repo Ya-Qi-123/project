@@ -18,7 +18,6 @@ public interface BookMapper extends BaseMapper<TBook> {
 
     int batchDeleteBooks(List<Long> ids);
 
-    TBook getById(Long id);
     TBook getByName(String name);
     TBook getByAuthor(String author);
     TBook getByISBN(String isbn);
