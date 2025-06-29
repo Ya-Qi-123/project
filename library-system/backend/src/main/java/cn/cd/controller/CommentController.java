@@ -31,7 +31,7 @@ public class CommentController {
         return AjaxResult.ok(comments);
     }
 
-    @PostMapping
+    @PostMapping("/addComment")
     public AjaxResult addComment(@RequestBody TComment comment) {
 
         boolean success = commentService.addComment(comment);

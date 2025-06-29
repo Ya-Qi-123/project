@@ -39,7 +39,7 @@ public interface BookMapper extends BaseMapper<TBook> {
             @Param("isbn") String isbn,
             @Param("category") String category);
 
-    void updateBookAvailableQuantity(Long id, int quantity);
+    void updateBookAvailableQuantity(Long id, int changeNum);
     void updateTotalAndAvailable(Long id, int changeNum);
 
     int gatAvailableQuantityById(Long id);

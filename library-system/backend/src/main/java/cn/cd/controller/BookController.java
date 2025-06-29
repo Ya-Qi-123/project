@@ -71,6 +71,9 @@ public class BookController {
         book.setAuthor(author);
         book.setPublisher(publisher);
         book.setCategory(category);
+        book.setLanguage(language);
+        book.setIntroduction(introduction);
+        book.setTotal_quantity(total_quantity);
         bookService.save(book);
         return AjaxResult.me().setMessage("添加成功");
 
@@ -89,9 +92,9 @@ public class BookController {
     public AjaxResult updateTotalQuantity(@RequestParam String isbn, @RequestParam int changeNum) {
         Long id = bookService.getByISBN(isbn).getId();
         if(changeNum > 0){
-            bookService.updateBookAvailableQuantity(id, changeNum);
+            bookService.updateTotalAndAvailable(id, changeNum);
         }else if(changeNum < 0 && Math.abs(changeNum) < bookService.gatAvailableQuantityById(id)){
-            bookService.updateBookAvailableQuantity(id, changeNum);
+            bookService.updateTotalAndAvailable(id, changeNum);
         }else if (changeNum < 0 && Math.abs(changeNum) > bookService.gatTotalQuantityById(id)) {
             return AjaxResult.fail("修改失败！馆藏数量不足");
         }else if(changeNum < 0 && Math.abs(changeNum) > bookService.gatAvailableQuantityById(id)){
@@ -136,7 +139,6 @@ public class BookController {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }
-
         TBook book = bookService.getBookById(id);
         return book != null
                 ? AjaxResult.ok(book)

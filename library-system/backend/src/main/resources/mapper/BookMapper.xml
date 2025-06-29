@@ -38,13 +38,13 @@
     <!-- 更新图书在库数量，如果借书，将quantity设置为负数 -->
     <update id="updateBookAvailableQuantity">
         UPDATE t_book
-        SET available_quantity = available_quantity + #{quantity}
+        SET available_quantity = available_quantity + #{changeNum}
         WHERE id = #{id}
     </update>
     <update id="updateTotalAndAvailable">
         UPDATE t_book
-        SET total_quantity = total_quantity + #{quantity},
-            available_quantity = available_quantity + #{quantity}
+        SET total_quantity = total_quantity + #{changeNum},
+            available_quantity = available_quantity + #{changeNum}
         WHERE id = #{id}
     </update>
 
