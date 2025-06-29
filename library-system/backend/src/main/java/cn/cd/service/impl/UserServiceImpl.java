@@ -1,14 +1,18 @@
 package cn.cd.service.impl;
 
 import cn.cd.exception.BusinessException;
+import cn.cd.query.UserQuery;
 import cn.cd.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.cd.domain.TUser;
 import cn.cd.service.UserService;
 import cn.cd.mapper.UserMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -93,6 +97,15 @@ public class UserServiceImpl
         // 续期
         redisUtil.expire(sessionId, EXPIRE_TIME, TimeUnit.SECONDS);
         return currentUser;
+    }
+
+    @Override
+    public Page<TUser> pageQuery(UserQuery userQuery) {
+        QueryWrapper queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(userQuery.getEmail()), "email", userQuery.getEmail())
+                .like(StringUtils.isNotBlank(userQuery.getPhone()), "phone", userQuery.getPhone());
+        Page<TUser> page = new Page<>(userQuery.getCurrentPage(), userQuery.getPageSize());
+        return this.page(page, queryWrapper);
     }
 
 }

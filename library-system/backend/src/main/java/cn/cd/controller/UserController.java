@@ -1,10 +1,12 @@
 package cn.cd.controller;
 
 import cn.cd.domain.TUser;
+import cn.cd.query.UserQuery;
 import cn.cd.service.LendService;
 import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -169,6 +171,11 @@ public class UserController {
         // TODO:清除Session
         redisUtils.delete(request.getSession().getId());
         return AjaxResult.ok("退出登录成功！");
+    }
+
+    @PostMapping("pageQueryUser")
+    public Page<TUser> pageQuery(@RequestBody UserQuery userQuery) {
+        return tUserService.pageQuery(userQuery);
     }
 
 }

@@ -24,6 +24,10 @@ spring:
           max-idle: 4
           min-idle: 2
           max-wait: 2000ms
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 knife4j:
   enable: true
   setting:

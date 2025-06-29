@@ -1,6 +1,8 @@
 package cn.cd.controller;
 
+import cn.cd.domain.TBook;
 import cn.cd.domain.TLendrecord;
+import cn.cd.domain.TUser;
 import cn.cd.query.LendQuery;
 import cn.cd.service.BookService;
 import cn.cd.service.LendService;
@@ -46,16 +48,29 @@ public class LendrecordController
     @PostMapping("/addRecord")
     public Object addRecord(@RequestParam String isbn,
                             @RequestParam String phone){
-        Long book_id = bookService.getByISBN(isbn).getId();
-        Long user_id = userService.getByPhone(phone).getId();
-        String category = bookService.getById(book_id).getCategory();
-        String bookname = bookService.getById(book_id).getName();
+        // 获取书籍信息并校验
+        TBook book = bookService.getByISBN(isbn);
+        if (book == null) {
+            return AjaxResult.me().setMessage("书籍不存在");
+        }
+        if(book.getAvailableQuantity() <= 0){
+            return AjaxResult.me().setMessage("没有可借阅的图书");
+        }
+        // 获取用户信息并校验
+        TUser user = userService.getByPhone(phone);
+        if (user == null) {
+            return AjaxResult.me().setMessage("用户不存在");
+        }
+        Long book_id = book.getId();
+        Long user_id = user.getId();
+        String category = book.getCategory();
+        String bookname = book.getName();
         lendService.addRecord(book_id, user_id, category, bookname);
         bookService.updateBookAvailableQuantity(book_id, -1);
         return AjaxResult.me().setMessage("添加成功");
     }
 
-    //    // 可以对借阅记录表进行查询，分页查询+高级查询
+//    // 可以对借阅记录表进行查询，分页查询+高级查询
 //    @PostMapping("/pageQuery")
 //    public Page<TLendrecord> pageQuery(@RequestBody LendQuery lendquery, HttpServletRequest request){
 //        TUser currentUser = userService.getCurrentUser(request);
@@ -76,7 +91,11 @@ public class LendrecordController
         if(lendquery == null){
             return Page.of(1, 5);
         }
-        return lendService.pageQuery(lendquery);
+        Page<TLendrecord> page = lendService.pageQuery(lendquery);
+        for (TLendrecord record : page.getRecords()) {
+            System.out.println("rent_time: " + record.getRentTime() + ", return_time: " + record.getReturnTime());
+        }
+        return page;
     }
 
     // 删除借阅记录
@@ -101,12 +120,9 @@ public class LendrecordController
 
     @GetMapping("/Reminder")
     public Object Reminder(@RequestParam Long user_id) {
-        List<TLendrecord> OverRecords = lendService.getOverTimeRecord(user_id);
-        List<TLendrecord> SoonRecords = lendService.getSoonRecord(user_id);
-
-        if(OverRecords.size() > 0){
+        if(lendService.getOverTimeRecord(user_id).size() > 0){
             return "你有图书超时了";
-        }else if(SoonRecords.size() > 0){
+        }else if(lendService.getSoonRecord(user_id).size() > 0){
             return "你有图书即将到期";
         }
         return "无到期或超时图书";

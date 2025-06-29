@@ -57,7 +57,9 @@ public class LendServiceImpl
                 .eq(lendquery.getStatus() != null,"status", lendquery.getStatus());
         Page<TLendrecord> page = new Page<>(lendquery.getCurrentPage(), lendquery.getPageSize());
         lendrecordMapper.selectCount(queryWrapper);
+
         return lendrecordMapper.selectPage(page, queryWrapper);
+
     }
 
     @Override

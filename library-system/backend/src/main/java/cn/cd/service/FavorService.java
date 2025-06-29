@@ -1,0 +1,11 @@
+package cn.cd.service;
+
+import cn.cd.domain.TFavor;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+public interface FavorService extends IService<TFavor> {
+    boolean addFavorite(TFavor favor);
+    boolean removeFavorite(Long id);
+    Page<TFavor> getFavoritesByUserId(Long userId, Integer page);
+}

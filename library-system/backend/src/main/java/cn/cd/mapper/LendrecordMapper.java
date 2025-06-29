@@ -2,9 +2,16 @@ package cn.cd.mapper;
 
 import cn.cd.domain.TLendrecord;
 import cn.cd.query.LendQuery;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.type.JdbcType;
 
 import java.util.List;
 import java.util.Map;
@@ -40,9 +47,6 @@ public interface LendrecordMapper extends BaseMapper<TLendrecord> {
         return this.selectMaps(wrapper);
     }
 
-
-    List<TLendrecord> countByUserid();
-
     void addRecord(Long book_id, Long user_id, String category, String bookname);
 
     // 查看当前用户的所有记录
@@ -56,7 +60,6 @@ public interface LendrecordMapper extends BaseMapper<TLendrecord> {
 
     List<TLendrecord> getOverTimeRecord(Long userId);
     List<TLendrecord> getSoonRecord(Long userId);
-
 
 
 }

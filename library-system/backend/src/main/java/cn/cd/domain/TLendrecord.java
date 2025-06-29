@@ -1,41 +1,28 @@
 package cn.cd.domain;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import static java.sql.DriverManager.println;
 
 @Data
 @TableName(value ="t_lendrecord")
 public class TLendrecord {
+    @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "book_id")
-    private String book_id;
+    private Long bookId;
 
-    @TableField(value = "user_id")
-    private String user_id;
+    private Long userId;
 
-    @TableField(value = "rent_time")
-    private String rent_time;
 
-    @TableField(value = "return_time")
-    private String return_time;
+    private String rentTime;
 
-    @TableField(value = "category")
+    private String returnTime;
+
     private String category;
     private String bookname;
     private Integer status; // 0已还,1未还
 
-
-    private  int statusSum;
-
-    public String getReturn_time(){
-        println("getReturn_time"+return_time);
-        return return_time;
-    }
 }

@@ -1,6 +1,8 @@
 package cn.cd.service;
 
 import cn.cd.domain.TUser;
+import cn.cd.query.UserQuery;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,4 +27,5 @@ public interface UserService extends IService<TUser> {
 
     TUser getCurrentUser(HttpServletRequest request);
 
+    Page<TUser> pageQuery(UserQuery userQuery);
 }

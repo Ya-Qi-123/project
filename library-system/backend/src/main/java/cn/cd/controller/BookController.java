@@ -73,7 +73,7 @@ public class BookController {
         book.setCategory(category);
         book.setLanguage(language);
         book.setIntroduction(introduction);
-        book.setTotal_quantity(total_quantity);
+        book.setTotalQuantity(total_quantity);
         bookService.save(book);
         return AjaxResult.me().setMessage("添加成功");
 

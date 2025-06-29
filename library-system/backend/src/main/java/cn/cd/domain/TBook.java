@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 public class TBook {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
     private String isbn;
     private String name;
     private BigDecimal price;
@@ -23,8 +24,6 @@ public class TBook {
     private String introduction;
 
 
-    @TableField(value = "total_quantity")
-    private int total_quantity;
-    @TableField(value = "available_quantity")
-    private int available_quantity;
+    private int totalQuantity;
+    private int availableQuantity;
 }
