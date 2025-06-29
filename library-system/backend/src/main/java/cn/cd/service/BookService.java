@@ -2,11 +2,12 @@ package cn.cd.service;
 
 import cn.cd.domain.TBook;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface BookService {
+public interface BookService extends IService<TBook> {
     List<TBook> HomePageService();
 
     int addBook(String isbn, String name, BigDecimal price,

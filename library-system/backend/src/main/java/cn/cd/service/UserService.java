@@ -2,6 +2,8 @@ package cn.cd.service;
 
 import cn.cd.domain.TUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.servlet.http.HttpServletRequest;
+
 
 public interface UserService extends IService<TUser> {
 
@@ -20,4 +22,7 @@ public interface UserService extends IService<TUser> {
     TUser getByPhone(String phone);
 
     TUser getByUsername(String username);
+
+    TUser getCurrentUser(HttpServletRequest request);
+
 }

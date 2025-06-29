@@ -4,13 +4,13 @@ import cn.cd.domain.TComment;
 import cn.cd.service.CommentService;
 import cn.cd.util.AjaxResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    @Autowired
+    @Resource
     private CommentService commentService;
 
     @GetMapping("/isbn/{isbn}")

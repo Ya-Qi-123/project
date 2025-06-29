@@ -3,9 +3,10 @@ package cn.cd.controller;
 import cn.cd.domain.TBook;
 import cn.cd.service.BookService;
 import cn.cd.util.AjaxResult;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -15,14 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-    @Autowired
+    @Resource
     private BookService bookService;
 
     private static final int MAX_INTEGER_DIGITS = 8;
     private static final int MAX_DECIMAL_DIGITS = 2;
 
     @GetMapping("/pageQueryForAdmin")
-    public AjaxResult getBooksByPageForAdmin(
+    public AjaxResult pageQueryForAdmin(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
@@ -35,7 +36,7 @@ public class BookController {
     }
 
     @GetMapping("/pageQueryForUser")
-    public AjaxResult getBooksByPageForUser(
+    public AjaxResult pageQueryForUser(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
@@ -58,17 +59,25 @@ public class BookController {
         if (errorMsg != null) {
             return AjaxResult.fail(errorMsg);
         }
-        if(bookService.getByISBN(isbn) != null){
+        QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("isbn", isbn);
+        if(bookService.getOne(queryWrapper) != null){
             return AjaxResult.fail("添加失败！该图书已存在");
         }
-        bookService.addBook(isbn, name, price, author, publisher, category,
-                language, introduction, total_quantity);
+        TBook book = new TBook();
+        book.setIsbn(isbn);
+        book.setName(name);
+        book.setPrice(price);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
+        book.setCategory(category);
+        bookService.save(book);
         return AjaxResult.me().setMessage("添加成功");
 
     }
 
     @GetMapping("/list")
-    public AjaxResult getByBookList() {
+    public AjaxResult getAll() {
         List<TBook> books = bookService.HomePageService();
         return books != null && !books.isEmpty()
                 ? AjaxResult.ok(books)
@@ -77,7 +86,8 @@ public class BookController {
 
     // 修改图书的馆藏数量
     @PostMapping("/update/TotalQuantity")
-    public AjaxResult updateTotalQuantity(@RequestParam Long id, @RequestParam int changeNum) {
+    public AjaxResult updateTotalQuantity(@RequestParam String isbn, @RequestParam int changeNum) {
+        Long id = bookService.getByISBN(isbn).getId();
         if(changeNum > 0){
             bookService.updateBookAvailableQuantity(id, changeNum);
         }else if(changeNum < 0 && Math.abs(changeNum) < bookService.gatAvailableQuantityById(id)){
@@ -89,6 +99,7 @@ public class BookController {
         }
         return AjaxResult.me().setMessage("修改成功");
     }
+
     @PostMapping("/updateAll")
     public AjaxResult updateBook(@RequestBody TBook  book) {
         if (!isValidId(book.getId())) {
@@ -121,7 +132,7 @@ public class BookController {
     }
 
     @GetMapping("/getById")
-    public AjaxResult getByBookDetail(@RequestParam Long id) {
+    public AjaxResult getById(@RequestParam Long id) {
         if (!isValidId(id)) {
             return AjaxResult.fail("图书ID格式错误");
         }

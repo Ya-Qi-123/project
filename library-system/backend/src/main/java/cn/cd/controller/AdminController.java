@@ -2,18 +2,19 @@ package cn.cd.controller;
 
 import cn.cd.domain.TAdmin;
 import cn.cd.service.AdminService;
-import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
+    @Resource
     private AdminService adminService;
 
     // 管理员的邮箱密码登录

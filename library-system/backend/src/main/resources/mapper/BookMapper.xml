@@ -54,30 +54,29 @@
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-        AND status != 0
     </delete>
 
-    <select id="getById" resultType="cn.cd.domain.TBook">
+    <select id="getById" resultMap ="BaseResultMap">
         select * from t_book where id= #{id}
     </select>
 
-    <select id="getByName" resultType="cn.cd.domain.TBook">
+    <select id="getByName" resultMap ="BaseResultMap">
         select * from t_book where name= #{name}
     </select>
 
-    <select id="getByAuthor" resultType="cn.cd.domain.TBook">
+    <select id="getByAuthor" resultMap ="BaseResultMap">
         select * from t_book where author= #{author}
     </select>
 
-    <select id="getByISBN" resultType="cn.cd.domain.TBook">
+    <select id="getByISBN" resultMap ="BaseResultMap">
         select * from t_book where isbn= #{isbn}
     </select>
 
-    <select id="getAll" resultType="cn.cd.domain.TBook">
+    <select id="getAll" resultMap ="BaseResultMap">
         select * from t_book
     </select>
 
-    <select id="selectPageForAdmin" resultType="cn.cd.domain.TBook">
+    <select id="selectPageForAdmin" resultMap ="BaseResultMap">
         SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">
@@ -95,7 +94,7 @@
         </where>
     </select>
 
-    <select id="selectPageForUser" resultType="cn.cd.domain.TBook">
+    <select id="selectPageForUser" resultMap ="BaseResultMap">
         SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">

@@ -1,27 +1,22 @@
 package cn.cd.service.impl;
+
 import cn.cd.domain.TBook;
-import cn.cd.domain.TComment;
 import cn.cd.mapper.BookMapper;
 import cn.cd.service.BookService;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.pagehelper.ISelect;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.baomidou.mybatisplus.core.toolkit.Wrappers.lambdaQuery;
-import static com.github.pagehelper.page.PageMethod.count;
-
 @Service
-public class BookServiceImpl implements BookService {
-    @Autowired
+public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements BookService {
+
+    @Resource
     private BookMapper bookMapper;
+
     @Override
     public Page<TBook> getBooksByPageForAdmin(
             int current, int size, String name,
