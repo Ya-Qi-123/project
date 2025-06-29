@@ -67,12 +67,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-        <!--        &lt;!&ndash;pagehelper分页插件&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.pagehelper</groupId>-->
-        <!--            <artifactId>pagehelper-spring-boot-starter</artifactId>-->
-        <!--            <version>1.4.6</version>-->
-        <!--        </dependency>-->
 
         <!--Mybatis-Plus依赖-->
         <dependency>
@@ -85,12 +79,6 @@
             <artifactId>mybatis-plus-jsqlparser</artifactId>
             <version>3.5.10.1</version>
         </dependency>
-        <!--        &lt;!&ndash; 显式添加JSqlParser依赖（解决类缺失问题） &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.jsqlparser</groupId>-->
-        <!--            <artifactId>jsqlparser</artifactId>-->
-        <!--            <version>4.5</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
@@ -100,19 +88,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
-        <!--        &lt;!&ndash; mysql驱动包 &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>mysql</groupId>-->
-        <!--            <artifactId>mysql-connector-java</artifactId>-->
-        <!--        </dependency>-->
-
-<!--        &lt;!&ndash; SLF4J 核心 API &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>slf4j-api</artifactId>-->
-<!--            <version>2.0.16</version> &lt;!&ndash; 版本可根据需求升级，如 2.0.9 &ndash;&gt;-->
-<!--        </dependency>-->
 
         <!-- 日志实现（以 Logback 为例，它内置支持 SLF4J） -->
         <dependency>
@@ -134,17 +109,6 @@
             <version>1.2.83</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.github.xiaoymin</groupId>-->
-<!--            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>-->
-<!--            <version>4.3.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
-<!--            <version>2.1.0</version> &lt;!&ndash; 至少 2.0.0 以上 &ndash;&gt;-->
-<!--        </dependency>-->
-        <!--  Bean Validation 实现  -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -166,18 +130,6 @@
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>4.3.0</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>io.springfox</groupId>-->
-<!--            <artifactId>springfox-core</artifactId>-->
-<!--            <version>2.10.5</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash;添加Knife4j依赖&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.xiaoymin</groupId>-->
-<!--            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>-->
-<!--            <version>4.3.0</version>-->
-<!--        </dependency>-->
 
     </dependencies>
 </project>
