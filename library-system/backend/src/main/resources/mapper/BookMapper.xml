@@ -89,6 +89,9 @@
             <if test="isbn != null and isbn != ''">
                 AND isbn LIKE CONCAT('%', #{isbn}, '%')
             </if>
+            <if test="category != null and category != ''">
+                AND category = #{category}
+            </if>
         </where>
     </select>
 

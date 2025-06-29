@@ -29,7 +29,9 @@ public interface BookMapper extends BaseMapper<TBook> {
             Page<TBook> page,
             @Param("name") String name,
             @Param("author") String author,
-            @Param("isbn") String isbn);
+            @Param("isbn") String isbn,
+            @Param("category") String category
+    );
 
     // 用户用的分页查询
     Page<TBook> selectPageForUser(
@@ -37,7 +39,9 @@ public interface BookMapper extends BaseMapper<TBook> {
             @Param("name") String name,
             @Param("author") String author,
             @Param("isbn") String isbn,
-            @Param("category") String category);
+            @Param("category") String category
+
+    );
 
     void updateBookAvailableQuantity(Long id, int quantity);
     void updateTotalAndAvailable(Long id, int changeNum);

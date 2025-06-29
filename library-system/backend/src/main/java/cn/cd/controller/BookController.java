@@ -27,9 +27,10 @@ public class BookController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String author,
-            @RequestParam(required = false) String isbn) {
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) String category) {
 
-        Page<TBook> page = bookService.getBooksByPageForAdmin(currentPage, size, name, author, isbn);
+        Page<TBook> page = bookService.getBooksByPageForUser(currentPage, size, name, author, isbn, category);
         return AjaxResult.ok().setData(page);
     }
 

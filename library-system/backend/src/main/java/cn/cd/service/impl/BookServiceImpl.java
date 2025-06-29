@@ -24,10 +24,10 @@ public class BookServiceImpl implements BookService {
     private BookMapper bookMapper;
     @Override
     public Page<TBook> getBooksByPageForAdmin(
-            int current, int size,
-            String name, String author, String isbn) {
+            int current, int size, String name,
+            String author, String isbn, String category) {
         Page<TBook> page = new Page<>(current, size);
-        return bookMapper.selectPageForAdmin(page, name, author, isbn);
+        return bookMapper.selectPageForAdmin(page, name, author, isbn,category);
     }
 
     @Override

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @TableName("t_favorite")
 public class TFavor {
-    private Long id; // 添加id字段，数据库自增
+    private Long id;
 
     @TableField("isbn")
     private String isbn;

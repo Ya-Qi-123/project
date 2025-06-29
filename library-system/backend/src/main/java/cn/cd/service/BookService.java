@@ -20,8 +20,8 @@ public interface BookService {
     TBook getByISBN(String isbn);
     // 增加分页查询接口方法
     Page<TBook> getBooksByPageForAdmin(
-            int current, int size,
-            String name, String author, String isbn);
+            int current, int size, String name,
+            String author, String isbn, String category);
 
     Page<TBook> getBooksByPageForUser(
             int current, int size, String name,
