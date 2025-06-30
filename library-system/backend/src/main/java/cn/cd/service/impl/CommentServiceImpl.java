@@ -8,26 +8,22 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment>
+        implements CommentService {
+
     @Resource
     private CommentMapper commentMapper;
 
     @Override
-    public Page<TComment> getCommentsByIsbn(String isbn, Integer page, Integer size) {
-        Page<TComment> pageInfo = new Page<>(page, size);
-        return commentMapper.selectPageByIsbn(pageInfo, isbn);
+    public Page<TComment> getCommentsByCondition(String isbn, Long userId, Integer page) {
+        Page<TComment> pageInfo = new Page<>(page, 10); // 固定分页大小
+        return commentMapper.selectPageByCondition(pageInfo, isbn, userId);
     }
-
-    @Override
-    public Page<TComment> getCommentsByUserId(Long userId, Integer page, Integer size) {
-        Page<TComment> pageInfo = new Page<>(page, size);
-        return commentMapper.selectPageByUserId(pageInfo, userId);
-    }
-
     @Override
     public boolean addComment(TComment comment) {
-        return commentMapper.save(comment);
+        return commentMapper.saveComment(comment) > 0;
     }
 
     @Override
@@ -38,4 +34,5 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
     public Double getAverageRating(String isbn) {
         return commentMapper.getAverageRatingByIsbn(isbn);
     }
+
 }

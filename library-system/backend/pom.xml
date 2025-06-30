@@ -124,7 +124,6 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
-        <!-- 替换为支持 Jakarta EE 的 Knife4j 版本 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>

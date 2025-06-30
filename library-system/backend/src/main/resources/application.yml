@@ -12,7 +12,7 @@ spring:
   datasource:
     username: djr
     password: 123456
-    url: jdbc:mysql://192.168.160.48:3306/library-system-new?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://192.168.10.37:3306/library-system-new?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
