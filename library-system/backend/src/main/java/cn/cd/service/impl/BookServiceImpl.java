@@ -11,7 +11,6 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -30,14 +29,13 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements B
 
     // 获取所有图书，实现分页查询、高级查询
     @Override
-    public Page<TBook> getBooksByPage(
-            int current, int size,
-            String name, String author, String isbn, String category) {
+    public Page<TBook> getBooksByPage(int current, int size, String name,
+                                      String author, String isbn, String category) {
         QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isBlank(name), "name", name);
-        queryWrapper.like(StringUtils.isBlank(author), "author", author);
-        queryWrapper.eq(StringUtils.isBlank(isbn), "isbn", isbn);
-        queryWrapper.like(StringUtils.isBlank(category), "category", category);
+        queryWrapper.like(!StringUtils.isBlank(name), "name", name);
+        queryWrapper.like(!StringUtils.isBlank(author), "author", author);
+        queryWrapper.eq(!StringUtils.isBlank(isbn), "isbn", isbn);
+        queryWrapper.like(!StringUtils.isBlank(category), "category", category);
         Page<TBook> page = new Page<>(current, size);
         return bookMapper.selectPage(page, queryWrapper);
     }
@@ -78,11 +76,6 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements B
 
 
     @Override
-    public void updateBook(TBook book) {
-        bookMapper.update(book);
-    }
-
-    @Override
     public TBook getByISBN(String isbn) {
         QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("isbn", isbn);
@@ -92,20 +85,10 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements B
     }
 
     @Override
-    public int batchDeleteBooks(List<Long> ids ) {
+    public int batchDeleteBooks(List<Long> ids) {
         return bookMapper.deleteByIds(ids);
 //        return bookMapper.batchDeleteBooks(ids);
     }
 
-    @Override
-    public void updateTotalAndAvailable(Long id, int changeNum) {
-        UpdateWrapper<TBook> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("id", id);
-        updateWrapper.setSql("total_quantity = total_quantity + " + changeNum);
-        updateWrapper.setSql("available_quantity = available_quantity + " + changeNum);
-        bookMapper.update(updateWrapper);
-
-//        bookMapper.updateTotalAndAvailable(id, changeNum);
-    }
 
 }

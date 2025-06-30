@@ -13,30 +13,30 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
-    @GetMapping("/getCommentsByIsbn")
-    public AjaxResult getCommentsByIsbn(
-            @RequestParam String isbn,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        Page<TComment> comments = commentService.getCommentsByIsbn(isbn, page, size);
-        return AjaxResult.ok(comments);
-    }
-
-    @GetMapping("/getCommentsByUserId")
-    public AjaxResult getCommentsByUserId(
-            @RequestParam Long userId,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
-        Page<TComment> comments = commentService.getCommentsByUserId(userId, page, size);
-        return AjaxResult.ok(comments);
-    }
+//    @GetMapping("/getCommentsByIsbn")
+//    public AjaxResult getCommentsByIsbn(
+//            @RequestParam String isbn,
+//            @RequestParam(defaultValue = "1") Integer page,
+//            @RequestParam(defaultValue = "10") Integer size) {
+//        Page<TComment> comments = commentService.getCommentsByIsbn(isbn, page, size);
+//        return AjaxResult.ok(comments);
+//    }
+//
+//    @GetMapping("/getCommentsByUserId")
+//    public AjaxResult getCommentsByUserId(
+//            @RequestParam Long userId,
+//            @RequestParam(defaultValue = "1") Integer page,
+//            @RequestParam(defaultValue = "10") Integer size) {
+//        Page<TComment> comments = commentService.getCommentsByUserId(userId, page, size);
+//        return AjaxResult.ok(comments);
+//    }
 
     @GetMapping("/pageQuery")
     public Page<TComment> pageQuery(
             @RequestParam(required = false) String isbn,
             @RequestParam(required = false) Long userId,
             @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "5") Integer size) {
         return commentService.pageQuery(isbn, userId, page, size);
     }
 
@@ -45,7 +45,7 @@ public class CommentController {
     public AjaxResult addComment(@RequestParam String content,
                                  @RequestParam String isbn,
                                  @RequestParam Long userId) {
-        boolean success = commentService.addComment(content,isbn,userId);
+        boolean success = commentService.addComment(content, isbn, userId);
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }
 

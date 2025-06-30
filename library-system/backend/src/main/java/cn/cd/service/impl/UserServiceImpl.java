@@ -1,16 +1,16 @@
 package cn.cd.service.impl;
 
+import cn.cd.domain.TUser;
 import cn.cd.exception.BusinessException;
+import cn.cd.mapper.UserMapper;
 import cn.cd.query.UserQuery;
+import cn.cd.service.UserService;
 import cn.cd.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.cd.domain.TUser;
-import cn.cd.service.UserService;
-import cn.cd.mapper.UserMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -53,12 +53,13 @@ public class UserServiceImpl
 
     @Override
     public int registerService(String username, String password,
-                                 String email, String phone) {
+                               String email, String phone) {
         TUser tUser = new TUser();
         tUser.setUsername(username);
         tUser.setPassword(password);
         tUser.setEmail(email);
         tUser.setPhone(phone);
+        tUser.setStatus(1);
         return tUserMapper.insert(tUser);
 //        return tUserMapper.register(username, password, email, phone);
     }
@@ -100,7 +101,6 @@ public class UserServiceImpl
         return tUserMapper.selectOne(queryWrapper);
 //        return tUserMapper.getByPhone(phone);
     }
-
 
 
     /**

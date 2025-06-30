@@ -4,6 +4,7 @@ import cn.cd.domain.TBook;
 import cn.cd.service.BookService;
 import cn.cd.util.AjaxResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -50,10 +51,16 @@ public class BookController {
 
     @PostMapping("/add")
     public AjaxResult addBook(
-            @RequestParam String isbn, @RequestParam String name, @RequestParam String author,
-            @RequestParam BigDecimal price, @RequestParam String publisher,
-            @RequestParam String category, @RequestParam String language,
-            @RequestParam String introduction, @RequestParam int total_quantity) {
+            @RequestParam String isbn,
+            @RequestParam String name,
+            @RequestParam String author,
+            @RequestParam BigDecimal price,
+            @RequestParam String publisher,
+            @RequestParam String category,
+            @RequestParam String language,
+            @RequestParam String introduction,
+            @RequestParam int total_quantity) {
+
         // 做空判断，若为空，则报错
         String errorMsg = validateBookFields(isbn, name, price, author, publisher, category);
         if (errorMsg != null) {
@@ -61,7 +68,7 @@ public class BookController {
         }
         QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("isbn", isbn);
-        if(bookService.getOne(queryWrapper) != null){
+        if (bookService.getOne(queryWrapper) != null) {
             return AjaxResult.fail("添加失败！该图书已存在");
         }
         TBook book = new TBook();
@@ -74,6 +81,7 @@ public class BookController {
         book.setLanguage(language);
         book.setIntroduction(introduction);
         book.setTotalQuantity(total_quantity);
+        book.setAvailableQuantity(total_quantity);
         bookService.save(book);
         return AjaxResult.me().setMessage("添加成功");
 
@@ -89,37 +97,68 @@ public class BookController {
 
     // 修改图书的馆藏数量
     @PostMapping("/update/TotalQuantity")
-    public AjaxResult updateTotalQuantity(@RequestParam String isbn, @RequestParam int changeNum) {
-        Long id = bookService.getByISBN(isbn).getId();
-        if(changeNum > 0){
-            bookService.updateTotalAndAvailable(id, changeNum);
-        }else if(changeNum < 0 && Math.abs(changeNum) < bookService.gatAvailableQuantityById(id)){
-            bookService.updateTotalAndAvailable(id, changeNum);
-        }else if (changeNum < 0 && Math.abs(changeNum) > bookService.gatTotalQuantityById(id)) {
-            return AjaxResult.fail("修改失败！馆藏数量不足");
-        }else if(changeNum < 0 && Math.abs(changeNum) > bookService.gatAvailableQuantityById(id)){
-            return AjaxResult.fail("修改失败！在库数量不足");
+    public Object updateTotalQuantity(@RequestParam String isbn,
+                                      @RequestParam int changeNum) {
+//        Long id = bookService.getByISBN(isbn).getId();
+        TBook book = bookService.lambdaQuery()
+                .eq(TBook::getIsbn, isbn)
+                .one();
+        if (book == null) {
+            return AjaxResult.fail("修改失败！图书不存在");
         }
+
+        int availableQuantity = book.getAvailableQuantity();
+        int totalQuantity = book.getTotalQuantity();
+
+        // 计算变化后的数量
+        if (changeNum > 0) {
+            // 增加馆藏
+            book.setTotalQuantity(totalQuantity + changeNum);
+            book.setAvailableQuantity(availableQuantity + changeNum);
+        } else if (changeNum < 0) {
+            int absChange = Math.abs(changeNum);
+            if (absChange > totalQuantity) {
+                return AjaxResult.fail("修改失败！馆藏数量不足");
+            }
+            if (absChange > availableQuantity) {
+                return AjaxResult.fail("修改失败！在库数量不足");
+            }
+            // 减少馆藏
+            book.setTotalQuantity(totalQuantity + changeNum);
+            book.setAvailableQuantity(availableQuantity + changeNum);
+        } else {
+            // changeNum 为 0，无需修改
+            return AjaxResult.me().setMessage("无需修改");
+        }
+        bookService.updateById(book);
         return AjaxResult.me().setMessage("修改成功");
     }
 
     @PostMapping("/updateAll")
-    public AjaxResult updateBook(@RequestBody TBook  book) {
-        if (!isValidId(book.getId())) {
-            return AjaxResult.fail("图书ID格式错误");
-        }
-        // 2. 检查图书是否存在
+    public AjaxResult updateBook(@RequestBody TBook book) {
         if (bookService.getById(book.getId()) == null) {
             return AjaxResult.fail("图书ID不存在，无法更新");
         }
-        String errorMsg = validateBookFields(book.getIsbn(), book.getName(),
-                book.getPrice(), book.getAuthor(),
-                book.getPublisher(), book.getCategory());
-        if (errorMsg != null) {
-            return AjaxResult.fail(errorMsg);
-        }
-        bookService.updateBook(book);
+        UpdateWrapper<TBook> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", book.getId());
+        bookService.update(book, updateWrapper);
         return AjaxResult.me().setMessage("更新成功");
+
+//        if (!isValidId(book.getId())) {
+//            return AjaxResult.fail("图书ID格式错误");
+//        }
+//        // 2. 检查图书是否存在
+//        if (bookService.getById(book.getId()) == null) {
+//            return AjaxResult.fail("图书ID不存在，无法更新");
+//        }
+//        String errorMsg = validateBookFields(book.getIsbn(), book.getName(),
+//                book.getPrice(), book.getAuthor(),
+//                book.getPublisher(), book.getCategory());
+//        if (errorMsg != null) {
+//            return AjaxResult.fail(errorMsg);
+//        }
+//        bookService.updateBook(book);
+//        return AjaxResult.me().setMessage("更新成功");
     }
 
 
@@ -136,17 +175,11 @@ public class BookController {
 
     @GetMapping("/getById")
     public AjaxResult getById(@RequestParam Long id) {
-        if (!isValidId(id)) {
-            return AjaxResult.fail("图书ID格式错误");
+        if (bookService.getById(id) == null) {
+            return AjaxResult.fail("图书不存在");
         }
         TBook book = bookService.getById(id);
-        return book != null
-                ? AjaxResult.ok(book)
-                : AjaxResult.fail("图书不存在");
-    }
-
-    private boolean isValidId(Long id) {
-        return id != null && id > 0;
+        return AjaxResult.ok(book);
     }
 
     private String validateBookFields(String isbn, String name,

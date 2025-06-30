@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +18,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
     public Page<TComment> getCommentsByIsbn(String isbn, Integer page, Integer size) {
         QueryWrapper<TComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("isbn", isbn);
-        Page<TComment> pageInfo = new Page<>(page,size);
+        Page<TComment> pageInfo = new Page<>(page, size);
         return commentMapper.selectPage(pageInfo, queryWrapper);
 //        Page<TComment> pageInfo = new Page<>(page, size);
 //        return commentMapper.selectPageByIsbn(pageInfo, isbn);
@@ -62,10 +61,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
 
     @Override
     public Page<TComment> pageQuery(String isbn, Long userId, Integer page, Integer size) {
-        QueryWrapper<TComment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(isbn), "isbn", isbn)
-                .eq(userId != null, "user_id", userId);
         Page<TComment> pageInfo = new Page<>(page, size);
-        return commentMapper.selectPage(pageInfo, queryWrapper);
+        return commentMapper.selectPageByCondition(pageInfo, isbn, userId);
+
+//        QueryWrapper<TComment> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq(StringUtils.isNotBlank(isbn), "isbn", isbn)
+//                .eq(userId != null, "user_id", userId);
+//        Page<TComment> pageInfo = new Page<>(page, size);
+//        return commentMapper.selectPage(pageInfo, queryWrapper);
     }
 }

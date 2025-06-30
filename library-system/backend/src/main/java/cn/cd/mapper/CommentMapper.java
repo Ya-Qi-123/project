@@ -19,4 +19,8 @@ public interface CommentMapper extends BaseMapper<TComment> {
     int deleteByIsbnAndUserId(@Param("isbn") String isbn, @Param("userId") Long userId);
 
     boolean save(TComment comment);
+
+    Page<TComment> selectPageByCondition(Page<TComment> page,
+                                         @Param("isbn") String isbn,
+                                         @Param("userId") Long userId);
 }

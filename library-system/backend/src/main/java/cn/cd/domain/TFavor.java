@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @TableName("t_favorite")
 public class TFavor {
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String isbn;

@@ -13,11 +13,10 @@ public class TComment {
     private Long id;
 
     private String isbn;
-
     private Long userId;
-
     private String content;
-
     private Integer rating = 5;
 
+    @TableField(exist = false) // 非数据库字段
+    private String bookName;
 }
