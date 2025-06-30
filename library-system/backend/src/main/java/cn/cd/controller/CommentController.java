@@ -42,9 +42,10 @@ public class CommentController {
 
 
     @PostMapping("/addComment")
-    public AjaxResult addComment(@RequestBody TComment comment) {
-
-        boolean success = commentService.addComment(comment);
+    public AjaxResult addComment(@RequestParam String content,
+                                 @RequestParam String isbn,
+                                 @RequestParam Long userId) {
+        boolean success = commentService.addComment(content,isbn,userId);
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }
 

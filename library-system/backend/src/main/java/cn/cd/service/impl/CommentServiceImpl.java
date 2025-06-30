@@ -37,8 +37,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, TComment> imp
     }
 
     @Override
-    public boolean addComment(TComment comment) {
-        return commentMapper.insert(comment) > 0;
+    public boolean addComment(String content, String isbn, Long userId) {
+        TComment comment = new TComment();
+        comment.setContent(content);
+        comment.setIsbn(isbn);
+        comment.setUserId(userId);
+        return commentMapper.save(comment);
 //        return commentMapper.save(comment);
     }
 
