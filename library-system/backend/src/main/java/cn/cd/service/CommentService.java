@@ -6,10 +6,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface CommentService extends IService<TComment> {
     Page<TComment> getCommentsByIsbn(String isbn, Integer page, Integer size);
+
     Page<TComment> getCommentsByUserId(Long userId, Integer page, Integer size);
 
-    boolean addComment(TComment comment);
+    boolean addComment(String content, String isbn, Long userId, int rating);
+
     boolean deleteComment(String isbn, Long userId);
 
     Double getAverageRating(String isbn);
+
+    Page<TComment> pageQuery(String isbn, Long userId, Integer page, Integer size);
 }

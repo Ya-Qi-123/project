@@ -33,11 +33,31 @@
         ORDER BY c.id DESC
     </select>
 
+    <select id="selectPageByCondition" resultMap="CommentResultMap">
+        SELECT c.*, b.name AS book_name
+        FROM t_comment c
+        LEFT JOIN t_book b ON c.isbn = b.isbn
+        <where>
+            <if test="isbn != null and isbn != ''">
+                AND c.isbn = #{isbn}
+            </if>
+            <if test="userId != null">
+                AND c.user_id = #{userId}
+            </if>
+        </where>
+        
+    </select>
+
     <select id="getAverageRatingByIsbn" resultType="java.lang.Double">
-        SELECT AVG(rating) FROM t_comment WHERE isbn = #{isbn}
+        SELECT AVG(rating)
+        FROM t_comment
+        WHERE isbn = #{isbn}
     </select>
 
     <delete id="deleteByIsbnAndUserId">
-        DELETE FROM t_comment WHERE isbn = #{isbn} AND user_id = #{userId}
+        DELETE
+        FROM t_comment
+        WHERE isbn = #{isbn}
+          AND user_id = #{userId}
     </delete>
 </mapper>

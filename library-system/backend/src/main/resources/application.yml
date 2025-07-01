@@ -1,25 +1,43 @@
 server:
-  port: 8080 # 端口浩
+  port: 8080
   servlet:
-    context-path: / # 上下文路径
+    session:
+      cookie:
+        name: SESSION
+        same-site: None
+        secure: true
+
 # 连接数据库的四大金刚
 spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/library-system-database?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false
+    url: jdbc:mysql://localhost:3306/library-system-new?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 4
+          min-idle: 2
+          max-wait: 2000ms
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
-# mybatis配置
-mybatis:
-  type-aliases-package: cn.cd.domain
-  mapper-locations: classpath:mapper/*Mapper.xml
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
 # 查看sql日志
 logging:
   level:
     cn.cd: trace
-
-# 导入mybatiplus的依赖
-mybatis-plus:
-  type-aliases-package: cn.cd.domain
-  mapper-locations: classpath:mapper/*Mapper.xml
+## 导入mybatiplus的依赖
+#mybatis-plus:
+#  type-aliases-package: cn.cd.domain
+#  mapper-locations: classpath:mapper/*Mapper.xml

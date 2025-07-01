@@ -3,22 +3,40 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.cd.mapper.BookMapper">
+    <resultMap id="BaseResultMap" type="cn.cd.domain.TBook">
+        <id property="id" column="id"/>
+        <result property="isbn" column="isbn"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="author" column="author"/>
+        <result property="publisher" column="publisher"/>
+        <result property="category" column="category"/>
+        <result property="language" column="language"/>
+        <result property="introduction" column="introduction"/>
+        <result property="totalQuantity" column="total_quantity"/>
+        <result property="availableQuantity" column="available_quantity"/>
+    </resultMap>
 
+    <!-- 添加图书时，默认将在库数量设置为馆藏数量 -->
     <insert id="add">
         INSERT INTO t_book
-            (name, isbn, author, price, publisher, status, category)
-        VALUES (#{name}, #{isbn}, #{author}, #{price}, #{publisher}, 1, #{category})
+        (isbn, name, price, author, publisher, category, language,
+         introduction, totalQuantity, availableQuantity)
+        VALUES (#{isbn}, #{name}, #{price}, #{author}, #{publisher}, #{category}, #{language},
+                #{introduction}, #{totalQuantity}, #{totalQuantity})
     </insert>
-    <update id="update">
+
+
+    <!-- 更新图书在库数量，如果借书，将quantity设置为负数 -->
+    <update id="updateBookAvailableQuantity">
         UPDATE t_book
-        SET name = #{name},isbn = #{isbn},author = #{author},
-            price = #{price},publisher = #{publisher},
-            status = #{status},category = #{category}
+        SET availableQuantity = availableQuantity + #{changeNum}
         WHERE id = #{id}
     </update>
-    <update id="updateBookStatus">
+    <update id="updateTotalAndAvailable">
         UPDATE t_book
-        SET status = #{status}
+        SET totalQuantity     = totalQuantity + #{changeNum},
+            availableQuantity = availableQuantity + #{changeNum}
         WHERE id = #{id}
     </update>
 
@@ -28,30 +46,38 @@
         <foreach collection="list" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-        AND status != 0
     </delete>
 
-    <select id="getById" resultType="cn.cd.domain.TBook">
-        select * from t_book where id= #{id}
+    <select id="getById" resultMap="BaseResultMap">
+        select *
+        from t_book
+        where id = #{id}
     </select>
 
-    <select id="getByName" resultType="cn.cd.domain.TBook">
-        select * from t_book where name= #{name}
+    <select id="getByName" resultMap="BaseResultMap">
+        select *
+        from t_book
+        where name = #{name}
     </select>
 
-    <select id="getByAuthor" resultType="cn.cd.domain.TBook">
-        select * from t_book where author= #{author}
+    <select id="getByAuthor" resultMap="BaseResultMap">
+        select *
+        from t_book
+        where author = #{author}
     </select>
 
-    <select id="getByISBN" resultType="cn.cd.domain.TBook">
-        select * from t_book where isbn= #{isbn}
+    <select id="getByISBN" resultMap="BaseResultMap">
+        select *
+        from t_book
+        where isbn = #{isbn}
     </select>
 
-    <select id="getAll" resultType="cn.cd.domain.TBook">
-        select * from t_book
+    <select id="getAll" resultMap="BaseResultMap">
+        select *
+        from t_book
     </select>
 
-    <select id="selectPageForAdmin" resultType="cn.cd.domain.TBook">
+    <select id="selectPageForAdmin" resultMap="BaseResultMap">
         SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">
@@ -66,15 +92,8 @@
         </where>
     </select>
 
-    <select id="selectPageForUser" resultType="cn.cd.domain.TBook">
-        SELECT name, author, isbn, category, publisher
-        FROM (
-        SELECT *,
-        ROW_NUMBER() OVER (
-        PARTITION by name, author, isbn, category
-        ORDER BY status DESC, id
-        ) AS row_num
-        FROM t_book
+    <select id="selectPageForUser" resultMap="BaseResultMap">
+        SELECT * FROM t_book
         <where>
             <if test="name != null and name != ''">
                 AND name LIKE CONCAT('%', #{name}, '%')
@@ -89,7 +108,17 @@
                 AND category = #{category}
             </if>
         </where>
-        ) AS grouped_books
-        WHERE row_num = 1
+    </select>
+
+    <select id="gatAvailableQuantityById" resultType="java.lang.Integer">
+        SELECT availableQuantity
+        FROM t_book
+        WHERE id = #{id}
+    </select>
+
+    <select id="gatTotalQuantityById" resultType="java.lang.Integer">
+        select totalQuantity
+        from t_book
+        where id = #{id}
     </select>
 </mapper>

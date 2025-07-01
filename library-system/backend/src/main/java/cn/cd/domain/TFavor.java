@@ -7,16 +7,21 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("t_comment")
-public class TComment {
+@TableName("t_favorite")
+public class TFavor {
     @TableId(type = IdType.AUTO)
     private Long id;
 
     private String isbn;
-    private Long userId;
-    private String content;
-    private Integer rating = 5;
 
-    @TableField(exist = false) // 非数据库字段
+    @TableField("user_id")
+    private Long userId;
+
+    @TableField("book_name")
     private String bookName;
+
+    @TableField("author")
+    private String author;
+
+
 }

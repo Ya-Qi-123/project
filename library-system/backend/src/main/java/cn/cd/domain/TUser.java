@@ -10,7 +10,9 @@ import lombok.Data;
 @TableName(value ="t_user")
 @Data
 public class TUser implements Serializable {
+    @TableId(type = IdType.AUTO)
     private Long id;
+
     private String username;
     private String password;
     private String email;
