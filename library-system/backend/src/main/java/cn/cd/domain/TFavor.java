@@ -22,4 +22,6 @@ public class TFavor {
 
     @TableField("author")
     private String author;
+
+
 }

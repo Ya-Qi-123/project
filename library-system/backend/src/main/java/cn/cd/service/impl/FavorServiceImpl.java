@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,15 +60,24 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, TFavor> implement
     }
 
     @Override
-    public Page<TFavor> getFavoritesByUserId(Long userId, Integer page) {
+    public Page<TFavor> getFavoritesByUserId(Long userId, Integer page, Integer size) {
         QueryWrapper<TFavor> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
-        Page<TFavor> pageInfo = new Page<>(page, 10);
+        Page<TFavor> pageInfo = new Page<>(page, size);
         return favorMapper.selectPage(pageInfo, queryWrapper);
 
 //        Page<TFavor> pageInfo = new Page<>(page, 10);
 //        return lambdaQuery()
 //                .eq(TFavor::getUserId, userId)
 //                .page(pageInfo);
+    }
+
+    @Override
+    public Page<TFavor> pageQuery(String isbn, Long userId, Integer page, Integer size) {
+        Page<TFavor> pageInfo = new Page<>(page, size);
+        QueryWrapper<TFavor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(StringUtils.isNotBlank(isbn), "isbn", isbn)
+                .eq(userId != null, "user_id", userId);
+        return favorMapper.selectPage(pageInfo, queryWrapper);
     }
 }

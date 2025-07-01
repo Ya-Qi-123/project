@@ -27,7 +27,7 @@ public class FavorController {
                                   @RequestParam Long userId,
                                   HttpServletRequest request) {
         TUser currentUser = userService.getCurrentUser(request);
-        if(!currentUser.getId().equals(userId)){
+        if (!currentUser.getId().equals(userId)) {
             throw new RuntimeException("用户权限不足");
         }
         boolean success = favorService.addFavorite(isbn, userId);
@@ -37,7 +37,7 @@ public class FavorController {
     @DeleteMapping("/removeById")
     public AjaxResult removeFavorite(@RequestParam Long id, HttpServletRequest request) {
         TUser currentUser = userService.getCurrentUser(request);
-        if(!currentUser.getId().equals( favorService.getById(id).getUserId())){
+        if (!currentUser.getId().equals(favorService.getById(id).getUserId())) {
             throw new RuntimeException("用户权限不足");
         }
         boolean success = favorService.removeById(id);
@@ -47,8 +47,19 @@ public class FavorController {
     @GetMapping("/getByUserId")
     public AjaxResult getFavoritesByUserId(
             @RequestParam Long userId,
-            @RequestParam(defaultValue = "1") Integer page) {
-        Page<TFavor> favorites = favorService.getFavoritesByUserId(userId, page);
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Page<TFavor> favorites = favorService.getFavoritesByUserId(userId, page, size);
+        return AjaxResult.ok(favorites);
+    }
+
+    @GetMapping("/pageQuery")
+    public AjaxResult pageQuery(
+            @RequestParam(required = false) String isbn,
+            @RequestParam(required = false) Long userId,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Page<TFavor> favorites = favorService.pageQuery(isbn, userId, page, size);
         return AjaxResult.ok(favorites);
     }
 }

@@ -1,10 +1,13 @@
 package cn.cd.controller;
 
 import cn.cd.domain.TComment;
+import cn.cd.domain.TUser;
 import cn.cd.service.CommentService;
+import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     @Resource
     private CommentService commentService;
+    @Resource
+    private UserService tUserService;
 
 //    @GetMapping("/getCommentsByIsbn")
 //    public AjaxResult getCommentsByIsbn(
@@ -44,8 +49,14 @@ public class CommentController {
     @PostMapping("/addComment")
     public AjaxResult addComment(@RequestParam String content,
                                  @RequestParam String isbn,
-                                 @RequestParam Long userId) {
-        boolean success = commentService.addComment(content, isbn, userId);
+                                 @RequestParam Long userId,
+                                 @RequestParam int rating,
+                                 HttpServletRequest request) {
+        TUser currentUser = tUserService.getCurrentUser(request);
+        if (!currentUser.getId().equals(userId)) {
+            throw new RuntimeException("用户权限不足");
+        }
+        boolean success = commentService.addComment(content, isbn, userId, rating);
         return success ? AjaxResult.ok("评论添加成功") : AjaxResult.fail("评论添加失败");
     }
 
