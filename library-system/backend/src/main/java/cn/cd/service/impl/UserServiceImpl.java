@@ -65,10 +65,17 @@ public class UserServiceImpl
     }
 
     @Override
-    public int updateStatus(Long id, Integer status) {
+    public int updateStatus(Long id) {
         UpdateWrapper<TUser> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id);
-        return tUserMapper.update(updateWrapper.set("status", status));
+        if (tUserMapper.getStatus(id) == 1) {
+            updateWrapper.set("status", 0);
+        } else if (tUserMapper.getStatus(id) == 0) {
+            updateWrapper.set("status", 1);
+        } else {
+            return -1;
+        }
+        return tUserMapper.update(updateWrapper);
 //        return tUserMapper.updateStatus(id, status);
     }
 

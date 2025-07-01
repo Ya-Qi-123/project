@@ -10,10 +10,12 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface UserService extends IService<TUser> {
 
     TUser loginServiceByEmailAndPassword(String email, String password);
+
     TUser loginServiceByPhoneAndPassword(String phone, String password);
 
     int registerService(String username, String password, String email, String phone);
-    int updateStatus(Long id, Integer status);
+
+    int updateStatus(Long id);
 
 
     int updatePersonalInformation(Long id, String username, String email, String phone, String gender);

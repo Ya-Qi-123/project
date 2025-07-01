@@ -2,6 +2,7 @@ package cn.cd.service.impl;
 
 import cn.cd.domain.TBook;
 import cn.cd.domain.TFavor;
+import cn.cd.exception.BusinessException;
 import cn.cd.mapper.BookMapper;
 import cn.cd.mapper.FavorMapper;
 import cn.cd.service.FavorService;
@@ -26,8 +27,8 @@ public class FavorServiceImpl extends ServiceImpl<FavorMapper, TFavor> implement
         QueryWrapper<TFavor> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
         queryWrapper.eq("isbn", isbn);
-        if (!favorMapper.exists(queryWrapper)) {
-            throw new RuntimeException("已收藏");
+        if (favorMapper.exists(queryWrapper)) {
+            throw new BusinessException("已收藏");
         }
 
         // 插入数据

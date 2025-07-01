@@ -5,7 +5,6 @@ import cn.cd.domain.TUser;
 import cn.cd.service.FavorService;
 import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
-import cn.cd.util.RedisUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,8 +18,6 @@ public class FavorController {
     private UserService userService;
     @Autowired
     private FavorService favorService;
-    @Resource
-    private RedisUtil redisUtil;
 
     @PostMapping("/add")
     public AjaxResult addFavorite(@RequestParam String isbn,

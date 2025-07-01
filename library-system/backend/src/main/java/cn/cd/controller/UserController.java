@@ -5,15 +5,15 @@ import cn.cd.query.UserQuery;
 import cn.cd.service.LendService;
 import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
+import cn.cd.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
-import cn.cd.util.RedisUtil;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -30,11 +30,10 @@ public class UserController {
     private RedisUtil redisUtils;
 
 
-
     // 用户的邮箱密码登录
     @PostMapping("/login/EmailAndPassword")
     @Parameters({
-            @Parameter(name = "email",    description = "用户邮箱", required = true),
+            @Parameter(name = "email", description = "用户邮箱", required = true),
             @Parameter(name = "password", description = "用户密码", required = true)
     })
     public Object loginByEmailAndPassword(@RequestParam String email,
@@ -47,7 +46,7 @@ public class UserController {
             if (tUser.getStatus() == 1) {
                 // TODO:登录成功，将用户信息存入Session
                 String sessionId = request.getSession().getId(); // 使用 session ID 作为 Redis 的 key
-                redisUtils.set(sessionId, JSON.toJSONString(tUser), 3600, TimeUnit.SECONDS);
+                redisUtils.set(sessionId, JSON.toJSONString(tUser), 6000, TimeUnit.SECONDS);
                 return tUser;
             } else {
                 return AjaxResult.fail("登录失败,该账号无法使用");
@@ -58,8 +57,8 @@ public class UserController {
     // 用户的手机号密码登录
     @PostMapping("/login/PhoneAndPassword")
     @Parameters({
-            @Parameter(name = "phone",    description = "用户手机号", required = true),
-            @Parameter(name = "password", description = "用户密码",  required = true)
+            @Parameter(name = "phone", description = "用户手机号", required = true),
+            @Parameter(name = "password", description = "用户密码", required = true)
     })
     public Object loginByPhoneAndPassword(@RequestParam String phone,
                                           @RequestParam String password,
@@ -71,7 +70,7 @@ public class UserController {
             if (tUser.getStatus() == 1) {
                 // TODO:登录成功，将用户信息存入Session
                 String sessionId = request.getSession().getId();
-                redisUtils.set(sessionId, JSON.toJSONString(tUser), 3600, TimeUnit.SECONDS);
+                redisUtils.set(sessionId, JSON.toJSONString(tUser), 6000, TimeUnit.SECONDS);
                 return tUser;
             } else {
                 return AjaxResult.fail("登录失败,该账号无法使用");
@@ -98,12 +97,13 @@ public class UserController {
         }
     }
 
-    // 用户的状态修改
+    // 管理员修改用户状态
     @PostMapping("/updateStatus")
-    public Object updateStatus(@RequestParam Long id,
-                               @RequestParam Integer status) {
-        int temp = tUserService.updateStatus(id, status);
-        if (temp == 1) {
+    public Object updateStatus(@RequestParam Long id) {
+        if (tUserService.getById(id) == null) {
+            return AjaxResult.fail("ID错误，用户不存在！");
+        }
+        if (tUserService.updateStatus(id) == 1) {
             return AjaxResult.ok("状态修改成功！");
         } else {
             return AjaxResult.fail("状态修改失败！");
@@ -113,11 +113,11 @@ public class UserController {
     // 用户个人信息修改
     @PostMapping("/updatePersonalInformation")
     public Object update(@RequestParam Long id, @RequestParam String username,
-                         @RequestParam String email,@RequestParam String phone,
+                         @RequestParam String email, @RequestParam String phone,
                          @RequestParam(required = false) String gender,
-                         HttpServletRequest  request) {
+                         HttpServletRequest request) {
         TUser currentUser = tUserService.getCurrentUser(request);
-        if( !Objects.equals(currentUser.getId(), id)){
+        if (!Objects.equals(currentUser.getId(), id)) {
             return AjaxResult.fail("用户权限不足无法修改");
         }
         if (tUserService.updatePersonalInformation(id, username, email, phone, gender) == 1) {
@@ -131,7 +131,7 @@ public class UserController {
     @DeleteMapping("/deleteById")
     public Object delete(@RequestParam Long id) {
         Integer statusSum = lendService.getStatus(id);
-        if(statusSum != null && statusSum > 0){
+        if (statusSum != null && statusSum > 0) {
             return AjaxResult.fail("该用户有未还的图书，请先还图书！");
         }
         if (tUserService.removeById(id)) {
@@ -146,14 +146,14 @@ public class UserController {
     public Object updatePassword(@RequestParam Long id,
                                  @RequestParam String oldPassword,
                                  @RequestParam String newPassword,
-                                 HttpServletRequest  request) {
+                                 HttpServletRequest request) {
         TUser currentUser = tUserService.getCurrentUser(request);
-        if( !Objects.equals(currentUser.getId(), id)){
+        if (!Objects.equals(currentUser.getId(), id)) {
             return AjaxResult.fail("用户权限不足");
         }
-        if(newPassword.equals(null) || newPassword.equals(oldPassword)){
+        if (newPassword.equals(null) || newPassword.equals(oldPassword)) {
             return AjaxResult.fail("修改密码失败，新密码为空或与原密码相同。");
-        }else{
+        } else {
             TUser tUser = tUserService.getById(id);
             if (tUser.getPassword().equals(oldPassword)) {
                 tUser.setPassword(newPassword);
@@ -165,6 +165,19 @@ public class UserController {
         }
     }
 
+    // 管理员重置用户密码
+    @PostMapping("/resetPassword")
+    public Object resetPassword(@RequestParam Long id) {
+        TUser tUser = tUserService.getById(id);
+        if (tUser == null) {
+            return AjaxResult.fail("用户不存在！");
+        } else {
+            tUser.setPassword("123456");
+            tUserService.updateById(tUser);
+            return AjaxResult.ok("密码重置成功！");
+        }
+    }
+
     // 用户退出登录
     @GetMapping("/logout")
     public Object logout(HttpServletRequest request) {
@@ -173,7 +186,7 @@ public class UserController {
         return AjaxResult.ok("退出登录成功！");
     }
 
-    @PostMapping("pageQueryUser")
+    @PostMapping("/pageQueryUser")
     public Page<TUser> pageQuery(@RequestBody UserQuery userQuery) {
         return tUserService.pageQuery(userQuery);
     }
