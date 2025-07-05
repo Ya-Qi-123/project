@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl
         extends ServiceImpl<UserMapper, TUser>
         implements UserService {
-    private static final long EXPIRE_TIME = 10;
+    private static final long EXPIRE_TIME = 3600;
     @Resource
     private UserMapper tUserMapper;
     @Resource

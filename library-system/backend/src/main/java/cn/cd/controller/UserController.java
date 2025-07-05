@@ -7,6 +7,7 @@ import cn.cd.service.UserService;
 import cn.cd.util.AjaxResult;
 import cn.cd.util.RedisUtil;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -131,6 +132,9 @@ public class UserController {
     @DeleteMapping("/deleteById")
     public Object delete(@RequestParam Long id) {
         Integer statusSum = lendService.getStatus(id);
+        if (id == -1) {
+            return AjaxResult.fail("该用户无法删除！");
+        }
         if (statusSum != null && statusSum > 0) {
             return AjaxResult.fail("该用户有未还的图书，请先还图书！");
         }
@@ -156,8 +160,10 @@ public class UserController {
         } else {
             TUser tUser = tUserService.getById(id);
             if (tUser.getPassword().equals(oldPassword)) {
-                tUser.setPassword(newPassword);
-                tUserService.updateById(tUser);
+                UpdateWrapper<TUser> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("id", id);
+                updateWrapper.set("password", newPassword);
+                tUserService.update(updateWrapper);
                 return AjaxResult.ok("修改密码成功！");
             } else {
                 return AjaxResult.fail("修改失败，原密码错误！");

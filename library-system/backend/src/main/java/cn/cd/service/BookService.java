@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookService extends IService<TBook> {
     List<TBook> HomePageService();
@@ -26,4 +27,7 @@ public interface BookService extends IService<TBook> {
     int gatAvailableQuantityById(Long id);
 
     int gatTotalQuantityById(Long id);
+
+    List<Map<String, Object>> getBookNumByCategory();
+
 }

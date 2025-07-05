@@ -1,11 +1,12 @@
 package cn.cd.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.IdType;
 
 
 @Data
@@ -26,4 +27,7 @@ public class TBook {
 
     private int totalQuantity;
     private int availableQuantity;
+
+    @TableField(exist = false) // 非数据库字段
+    private int bookNum;
 }
