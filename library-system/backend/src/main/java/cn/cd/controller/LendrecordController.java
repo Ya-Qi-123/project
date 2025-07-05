@@ -136,11 +136,11 @@ public class LendrecordController {
     @GetMapping("/Reminder")
     public Object Reminder(@RequestParam Long user_id) {
         if (lendService.getOverTimeRecord(user_id).size() > 0) {
-            return "你有图书超时了";
+            return "-1"; //有图书超时，返回-1
         } else if (lendService.getSoonRecord(user_id).size() > 0) {
-            return "你有图书即将到期";
+            return "0"; //有图书即将到期，返回0
         }
-        return "无到期或超时图书";
+        return "1"; // 没有图书超时，返回1
     }
 
 }

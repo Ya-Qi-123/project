@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/book")
@@ -182,6 +183,11 @@ public class BookController {
         return AjaxResult.ok(book);
     }
 
+    @GetMapping("/getBookNumByCategory")
+    public List<Map<String, Object>> getBookNumByCategory() {
+        return bookService.getBookNumByCategory();
+    }
+
     private String validateBookFields(String isbn, String name,
                                       BigDecimal price, String author,
                                       String publisher, String category) {
@@ -196,6 +202,7 @@ public class BookController {
         // 价格校验
         return validatePrice(price);
     }
+
 
     private String validatePrice(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) <= 0) {

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements BookService {
@@ -66,6 +67,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, TBook> implements B
     @Override
     public int gatTotalQuantityById(Long id) {
         return bookMapper.selectById(id).getTotalQuantity();
+    }
+
+    @Override
+    public List<Map<String, Object>> getBookNumByCategory() {
+        QueryWrapper<TBook> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("category", "count(id) as book_num");
+        queryWrapper.groupBy("category");
+        return bookMapper.selectMaps(queryWrapper);
     }
 
 
